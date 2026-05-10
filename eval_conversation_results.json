@@ -1,0 +1,263 @@
+{
+  "config": {
+    "model": "deepseek-v4-flash",
+    "base_url": "https://api.deepseek.com/v1",
+    "mock": false
+  },
+  "global": {
+    "A_accuracy": 4.129032258064516,
+    "B_accuracy": 2.193548387096774,
+    "A_completeness": 4.129032258064516,
+    "B_completeness": 2.096774193548387,
+    "A_specificity": 4.806451612903226,
+    "B_specificity": 2.6451612903225805,
+    "A_hallucination_rate": 0.1935483870967742,
+    "B_hallucination_rate": 0.3548387096774194,
+    "win_rate_a": 0.7419354838709677,
+    "win_rate_b": 0.25806451612903225,
+    "tie_rate": 0.0
+  },
+  "per_scenario": {
+    "1": {
+      "winners": {
+        "A": 2,
+        "B": 2,
+        "tie": 0
+      },
+      "scores_a": {
+        "accuracy": 3.5,
+        "completeness": 3.5,
+        "specificity": 4.5
+      },
+      "scores_b": {
+        "accuracy": 2.5,
+        "completeness": 3.0,
+        "specificity": 3.75
+      }
+    },
+    "2": {
+      "winners": {
+        "A": 2,
+        "B": 1,
+        "tie": 0
+      },
+      "scores_a": {
+        "accuracy": 4.0,
+        "completeness": 4.333333333333333,
+        "specificity": 5.0
+      },
+      "scores_b": {
+        "accuracy": 2.0,
+        "completeness": 2.0,
+        "specificity": 2.0
+      }
+    },
+    "3": {
+      "winners": {
+        "A": 5,
+        "B": 0,
+        "tie": 0
+      },
+      "scores_a": {
+        "accuracy": 5.0,
+        "completeness": 5.0,
+        "specificity": 5.0
+      },
+      "scores_b": {
+        "accuracy": 1.4,
+        "completeness": 1.2,
+        "specificity": 1.6
+      }
+    },
+    "4": {
+      "winners": {
+        "A": 4,
+        "B": 1,
+        "tie": 0
+      },
+      "scores_a": {
+        "accuracy": 4.2,
+        "completeness": 4.2,
+        "specificity": 4.8
+      },
+      "scores_b": {
+        "accuracy": 1.6,
+        "completeness": 1.2,
+        "specificity": 1.6
+      }
+    },
+    "5": {
+      "winners": {
+        "A": 2,
+        "B": 2,
+        "tie": 0
+      },
+      "scores_a": {
+        "accuracy": 3.75,
+        "completeness": 4.0,
+        "specificity": 4.5
+      },
+      "scores_b": {
+        "accuracy": 4.0,
+        "completeness": 3.75,
+        "specificity": 4.25
+      }
+    },
+    "6": {
+      "winners": {
+        "A": 3,
+        "B": 0,
+        "tie": 0
+      },
+      "scores_a": {
+        "accuracy": 4.666666666666667,
+        "completeness": 4.333333333333333,
+        "specificity": 4.666666666666667
+      },
+      "scores_b": {
+        "accuracy": 1.6666666666666667,
+        "completeness": 2.0,
+        "specificity": 3.3333333333333335
+      }
+    },
+    "7": {
+      "winners": {
+        "A": 2,
+        "B": 1,
+        "tie": 0
+      },
+      "scores_a": {
+        "accuracy": 3.6666666666666665,
+        "completeness": 3.6666666666666665,
+        "specificity": 5.0
+      },
+      "scores_b": {
+        "accuracy": 2.6666666666666665,
+        "completeness": 2.0,
+        "specificity": 3.0
+      }
+    },
+    "8": {
+      "winners": {
+        "A": 3,
+        "B": 1,
+        "tie": 0
+      },
+      "scores_a": {
+        "accuracy": 4.0,
+        "completeness": 3.75,
+        "specificity": 5.0
+      },
+      "scores_b": {
+        "accuracy": 2.0,
+        "completeness": 2.0,
+        "specificity": 2.25
+      }
+    }
+  },
+  "total_judgments": 40,
+  "sample_judgments": [
+    {
+      "question": "朋友过生日，让我帮忙挑个蛋糕。之前说过我的口味偏好，你觉得什么口味合适？",
+      "winner": "B",
+      "accuracy": {
+        "A": 3,
+        "B": 5,
+        "reasoning": "A推荐的黑森林蛋糕可能含奶油，且编造了用户喜欢咖啡和辣味，不完全符合Ground Truth；B推荐的芒果百香果慕斯、抹茶草莓蛋糕等明确低糖清爽，无幻觉"
+      },
+      "judge_reasoning": "助手B的回答准确贴合用户偏好，推荐了多种低糖不腻的具体蛋糕，无任何幻觉。助手A虽然也避免了传统奶油蛋糕，但编造了用户并未提及的咖啡和辣味偏好，且推荐的黑森林蛋糕可能隐含奶油，整体质量低于B。",
+      "error": ""
+    },
+    {
+      "question": "下午 3 点想喝点东西提神，还记得我之前的咖啡偏好吗？给个推荐。",
+      "winner": "B",
+      "accuracy": {
+        "A": 1,
+        "B": 2,
+        "reasoning": "A完全编造了用户对巧克力、无辣不欢的偏好，且推荐了用户不喜欢的意式浓缩类饮品；B误认为用户喜欢清爽不甜腻口味，但未提及非洲豆手冲，部分偏离"
+      },
+      "judge_reasoning": "两个回答均未正确记忆用户偏好，但助手A编造了大量虚假信息且推荐了用户不喜欢的浓缩咖啡；助手B虽未命中关键点，但避免了明显错误和幻觉，相对更贴近常见提神需求。因此助手B略优。",
+      "error": ""
+    },
+    {
+      "question": "团队想约我明天早上 8 点开会讨论需求，你之前知道我的工作习惯，觉得合适吗？",
+      "winner": "A",
+      "accuracy": {
+        "A": 5,
+        "B": 1,
+        "reasoning": "A完全符合用户7-9点高效工作、不应开会的习惯；B错误推测用户需要提神饮品才清醒，与事实矛盾"
+      },
+      "judge_reasoning": "助手A完全基于用户真实习惯给出具体、可执行的建议，准确且全面；助手B虽结论相似但依据错误、编造细节，导致误导性较强。综合评估A显著优于B。",
+      "error": ""
+    },
+    {
+      "question": "周末约了人去吃川菜，上次说过我的口味，给我推荐几道经典必点菜吧。",
+      "winner": "A",
+      "accuracy": {
+        "A": 5,
+        "B": 2,
+        "reasoning": "A准确回忆用户无辣不欢，B错误认为用户喜欢清爽不甜腻"
+      },
+      "judge_reasoning": "助手A准确基于用户无辣不欢的口味推荐了经典川菜，细节丰富且完全符合Ground Truth；助手B错误记忆了用户偏好，推荐与辣味不符的菜品，存在幻觉。因此A明显更优。",
+      "error": ""
+    },
+    {
+      "question": "数据库选了什么？我想在另一个项目里参考一下。之前聊过技术栈的。",
+      "winner": "A",
+      "accuracy": {
+        "A": 5,
+        "B": 1,
+        "reasoning": "A准确给出了数据库名称和理由，与Ground Truth一致；B未提供任何事实信息，完全失分。"
+      },
+      "judge_reasoning": "助手A直接、准确地回答了用户问题，完全符合Ground Truth；助手B未能利用历史对话信息，没有提供任何有效答案，明显不如A。",
+      "error": ""
+    },
+    {
+      "question": "我们 API 网关用的什么？认证方案是啥来着？上次讨论过的，我写文档需要。",
+      "winner": "A",
+      "accuracy": {
+        "A": 5,
+        "B": 1,
+        "reasoning": "助手A直接给出与Ground Truth一致的正确信息；助手B未提供任何事实信息，且声称没有记录，未回答用户问题。"
+      },
+      "judge_reasoning": "助手A准确、完整、具体地回应用户的查询，完全符合Ground Truth；助手B未能提供用户明确需求的历史信息，虽然安全但缺乏实用性。因此助手A明显更优。",
+      "error": ""
+    },
+    {
+      "question": "用户说登录状态经常丢，可能是哪里的问题？记得之前说过我们的缓存架构。",
+      "winner": "B",
+      "accuracy": {
+        "A": 2,
+        "B": 4,
+        "reasoning": "A 错误地假设了 Redis 6.x 和 Kong 架构，与 Ground Truth 的 Redis Cluster 3主3从不符；B 虽然笼统但未出现矛盾，且提到了集群连通性等可能问题。"
+      },
+      "judge_reasoning": "助手 B 更忠实于 Ground Truth，没有引入未提及的组件，且覆盖了 Redis 集群可能的问题；助手 A 虽然详细但基于错误假设，存在幻觉。因此 B 更可靠。",
+      "error": ""
+    },
+    {
+      "question": "部署流程是什么？新同事问我要怎么上线一个新功能。之前说过的。",
+      "winner": "?",
+      "accuracy": {},
+      "judge_reasoning": "",
+      "error": "Expecting ',' delimiter: line 4 column 84 (char 298)"
+    },
+    {
+      "question": "我在写系统架构文档，把日志和监控那块也给我总结一下。之前提过的。",
+      "winner": "?",
+      "accuracy": {},
+      "judge_reasoning": "",
+      "error": "Expecting ',' delimiter: line 3 column 131 (char 271)"
+    },
+    {
+      "question": "CTO 强调的那个高优需求是什么？我忘了截止日期了。上次 sprint planning 说的。",
+      "winner": "A",
+      "accuracy": {
+        "A": 5,
+        "B": 1,
+        "reasoning": "助手A准确回答了用户权限系统重构、P0优先级和下周五截止，与Ground Truth完全一致；助手B声称找不到信息，未提供正确内容。"
+      },
+      "judge_reasoning": "助手A准确、完整、具体地复述了GT中的关键信息，完全符合用户需求；助手B未能提供有效回答，虽然未产生幻觉，但缺乏有用内容。因此助手A明显更优。",
+      "error": ""
+    }
+  ]
+}

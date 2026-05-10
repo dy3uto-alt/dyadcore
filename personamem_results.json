@@ -1,0 +1,555 @@
+{
+  "metrics": {
+    "overall_accuracy": 0.0,
+    "total_questions": 50,
+    "valid_answers": 50,
+    "correct_answers": 0,
+    "errors": 0,
+    "by_question_type": {
+      "generalizing_to_new_scenarios": {
+        "accuracy": 0.0,
+        "correct": 0,
+        "total": 8
+      },
+      "provide_preference_aligned_recommendations": {
+        "accuracy": 0.0,
+        "correct": 0,
+        "total": 7
+      },
+      "recall_user_shared_facts": {
+        "accuracy": 0.0,
+        "correct": 0,
+        "total": 8
+      },
+      "recalling_the_reasons_behind_previous_updates": {
+        "accuracy": 0.0,
+        "correct": 0,
+        "total": 10
+      },
+      "suggest_new_ideas": {
+        "accuracy": 0.0,
+        "correct": 0,
+        "total": 8
+      },
+      "track_full_preference_evolution": {
+        "accuracy": 0.0,
+        "correct": 0,
+        "total": 9
+      }
+    },
+    "by_topic": {
+      "bookRecommendation": {
+        "accuracy": 0.0,
+        "correct": 0,
+        "total": 33
+      },
+      "musicRecommendation": {
+        "accuracy": 0.0,
+        "correct": 0,
+        "total": 17
+      }
+    }
+  },
+  "results": [
+    {
+      "question_id": "2cef53ac-c165-41b5-a31f-c3064106471f",
+      "question_type": "track_full_preference_evolution",
+      "topic": "musicRecommendation",
+      "question": "After several disagreements over the artistic direction, I felt stifled, which really discouraged me from that collabora",
+      "correct_answer": "(a)",
+      "llm_answer": "",
+      "correct": false,
+      "error": ""
+    },
+    {
+      "question_id": "4afc48ca-e6a7-4467-abd2-911915199315",
+      "question_type": "track_full_preference_evolution",
+      "topic": "musicRecommendation",
+      "question": "I found that my reviews were often criticized for not being objective, which made me less engaged in the process. It fel",
+      "correct_answer": "(a)",
+      "llm_answer": "",
+      "correct": false,
+      "error": ""
+    },
+    {
+      "question_id": "6142fba4-a233-405a-a4fe-a5b2e27374a7",
+      "question_type": "recalling_the_reasons_behind_previous_updates",
+      "topic": "musicRecommendation",
+      "question": "User: I found that my reviews were often criticized for not being objective, which made me less engaged in the process. ",
+      "correct_answer": "(c)",
+      "llm_answer": "",
+      "correct": false,
+      "error": ""
+    },
+    {
+      "question_id": "defecce2-ff39-438e-ae41-90f3bcf9cb48",
+      "question_type": "track_full_preference_evolution",
+      "topic": "musicRecommendation",
+      "question": "I found a mentor who helped me make the connection between music theory and my cultural background, which made it more r",
+      "correct_answer": "(b)",
+      "llm_answer": "",
+      "correct": false,
+      "error": ""
+    },
+    {
+      "question_id": "acd74206-37dc-4756-94a8-b99a395d9a21",
+      "question_type": "recall_user_shared_facts",
+      "topic": "musicRecommendation",
+      "question": "I recently attended an event where there was a unique blend of modern beats with Pacific sounds.",
+      "correct_answer": "(c)",
+      "llm_answer": "",
+      "correct": false,
+      "error": ""
+    },
+    {
+      "question_id": "f546a74f-54de-40d0-9d88-8b0e30467d7b",
+      "question_type": "provide_preference_aligned_recommendations",
+      "topic": "musicRecommendation",
+      "question": "I'm planning a weekend getaway and want to try something creatively fulfilling. What would you suggest?",
+      "correct_answer": "(d)",
+      "llm_answer": "",
+      "correct": false,
+      "error": ""
+    },
+    {
+      "question_id": "b3588797-acdf-40d3-bcc5-951f81896f95",
+      "question_type": "suggest_new_ideas",
+      "topic": "musicRecommendation",
+      "question": "How can I find a more fulfilling way to express my love for music?",
+      "correct_answer": "(a)",
+      "llm_answer": "",
+      "correct": false,
+      "error": ""
+    },
+    {
+      "question_id": "5370f186-0028-41f4-b436-c48575899fca",
+      "question_type": "suggest_new_ideas",
+      "topic": "musicRecommendation",
+      "question": "I'm exploring new creative outlets and would love some suggestions. Any ideas on activities that can capture emotions an",
+      "correct_answer": "(b)",
+      "llm_answer": "",
+      "correct": false,
+      "error": ""
+    },
+    {
+      "question_id": "a40d5f67-8ec6-480b-a901-9709eecee9b9",
+      "question_type": "recalling_the_reasons_behind_previous_updates",
+      "topic": "musicRecommendation",
+      "question": "I've decided I don't enjoy podcasting about music trends anymore.",
+      "correct_answer": "(d)",
+      "llm_answer": "",
+      "correct": false,
+      "error": ""
+    },
+    {
+      "question_id": "fd81b480-5723-43fe-9fb1-d3efa0df8e49",
+      "question_type": "recall_user_shared_facts",
+      "topic": "musicRecommendation",
+      "question": "I recently attended an event where there was a unique blend of modern beats with Pacific sounds.",
+      "correct_answer": "(b)",
+      "llm_answer": "",
+      "correct": false,
+      "error": ""
+    },
+    {
+      "question_id": "60023d63-4f11-47dc-8cef-82e3ca665a68",
+      "question_type": "provide_preference_aligned_recommendations",
+      "topic": "musicRecommendation",
+      "question": "I'm planning a weekend getaway and want to try something creatively fulfilling. What would you suggest?",
+      "correct_answer": "(a)",
+      "llm_answer": "",
+      "correct": false,
+      "error": ""
+    },
+    {
+      "question_id": "c8a763a5-a7ae-4047-b1cf-f17204fd1f7d",
+      "question_type": "suggest_new_ideas",
+      "topic": "musicRecommendation",
+      "question": "How can I find a more fulfilling way to express my love for music?",
+      "correct_answer": "(b)",
+      "llm_answer": "",
+      "correct": false,
+      "error": ""
+    },
+    {
+      "question_id": "ce9c7c39-c600-4971-9a7d-51a46e6c915c",
+      "question_type": "suggest_new_ideas",
+      "topic": "musicRecommendation",
+      "question": "I'm exploring new creative outlets and would love some suggestions. Any ideas on activities that can capture emotions an",
+      "correct_answer": "(b)",
+      "llm_answer": "",
+      "correct": false,
+      "error": ""
+    },
+    {
+      "question_id": "217481b7-ad97-45d8-988f-abb3f9cf9b34",
+      "question_type": "recalling_the_reasons_behind_previous_updates",
+      "topic": "musicRecommendation",
+      "question": "I've decided I don't enjoy podcasting about music trends anymore.",
+      "correct_answer": "(c)",
+      "llm_answer": "",
+      "correct": false,
+      "error": ""
+    },
+    {
+      "question_id": "b4812983-2c33-48ae-8955-1a19f78f7f54",
+      "question_type": "recall_user_shared_facts",
+      "topic": "musicRecommendation",
+      "question": "I recently revisited a project where we released a remix album combining electronic music and Pacific Islander melodies.",
+      "correct_answer": "(b)",
+      "llm_answer": "",
+      "correct": false,
+      "error": ""
+    },
+    {
+      "question_id": "344ea859-e70d-48d2-8a97-7b68a104c6ae",
+      "question_type": "provide_preference_aligned_recommendations",
+      "topic": "musicRecommendation",
+      "question": "I'm working on a new project blending cultural elements with modern music styles and I'm curious what fresh approaches o",
+      "correct_answer": "(a)",
+      "llm_answer": "",
+      "correct": false,
+      "error": ""
+    },
+    {
+      "question_id": "c6d22f3d-282f-4e11-b9fd-39e2a687ef18",
+      "question_type": "suggest_new_ideas",
+      "topic": "musicRecommendation",
+      "question": "I'm curious about how to start writing impactful album reviews that connect deeply with the music. What should I focus o",
+      "correct_answer": "(a)",
+      "llm_answer": "",
+      "correct": false,
+      "error": ""
+    },
+    {
+      "question_id": "7028667b-f2aa-4e22-a2e3-2bb97f3d9605",
+      "question_type": "track_full_preference_evolution",
+      "topic": "bookRecommendation",
+      "question": "For starters, I've come to the conclusion that indie bookstores are not really the ideal fit for me anymore. The persona",
+      "correct_answer": "(d)",
+      "llm_answer": "",
+      "correct": false,
+      "error": ""
+    },
+    {
+      "question_id": "1da9453e-94f6-4e6d-9ae4-b7481217fdd1",
+      "question_type": "track_full_preference_evolution",
+      "topic": "bookRecommendation",
+      "question": "I also restarted my book blog, and I'm beginning a series focused on emotional responses to literature. This has been a ",
+      "correct_answer": "(a)",
+      "llm_answer": "",
+      "correct": false,
+      "error": ""
+    },
+    {
+      "question_id": "848b2923-33da-4ebc-86b5-e70374311fd2",
+      "question_type": "recalling_the_reasons_behind_previous_updates",
+      "topic": "bookRecommendation",
+      "question": "User: I also restarted my book blog, and I'm beginning a series focused on emotional responses to literature. This has b",
+      "correct_answer": "(c)",
+      "llm_answer": "",
+      "correct": false,
+      "error": ""
+    },
+    {
+      "question_id": "0d49fda3-d417-4a47-9d8d-f6000ffa8097",
+      "question_type": "track_full_preference_evolution",
+      "topic": "bookRecommendation",
+      "question": "Surprisingly, I became actively involved in a classic literature book club recently. This decision was inspired by a men",
+      "correct_answer": "(c)",
+      "llm_answer": "",
+      "correct": false,
+      "error": ""
+    },
+    {
+      "question_id": "4ca0a992-6743-4369-95b6-920712f8ef8b",
+      "question_type": "track_full_preference_evolution",
+      "topic": "bookRecommendation",
+      "question": "After some thought, I even started listening to a new storytelling podcast that blends literature with writing advice. I",
+      "correct_answer": "(c)",
+      "llm_answer": "",
+      "correct": false,
+      "error": ""
+    },
+    {
+      "question_id": "f04613eb-8eff-4a4c-a191-d2574c87e67b",
+      "question_type": "track_full_preference_evolution",
+      "topic": "bookRecommendation",
+      "question": "On a creative note, I formed a partnership with local artists to create unique book-themed merchandise for upcoming even",
+      "correct_answer": "(c)",
+      "llm_answer": "",
+      "correct": false,
+      "error": ""
+    },
+    {
+      "question_id": "221c8369-8ac4-447e-a13c-6088536f9abf",
+      "question_type": "recalling_the_reasons_behind_previous_updates",
+      "topic": "bookRecommendation",
+      "question": "User: On a creative note, I formed a partnership with local artists to create unique book-themed merchandise for upcomin",
+      "correct_answer": "(d)",
+      "llm_answer": "",
+      "correct": false,
+      "error": ""
+    },
+    {
+      "question_id": "002e8df3-cebf-4197-8c16-cb834cc13aef",
+      "question_type": "track_full_preference_evolution",
+      "topic": "bookRecommendation",
+      "question": "However, I've decided to step back from structured book club settings. I found that the rigidity was less enjoyable than",
+      "correct_answer": "(c)",
+      "llm_answer": "",
+      "correct": false,
+      "error": ""
+    },
+    {
+      "question_id": "08814cb2-99dc-441d-b93b-8dcadf7f4859",
+      "question_type": "recalling_the_reasons_behind_previous_updates",
+      "topic": "bookRecommendation",
+      "question": "User: However, I've decided to step back from structured book club settings. I found that the rigidity was less enjoyabl",
+      "correct_answer": "(b)",
+      "llm_answer": "",
+      "correct": false,
+      "error": ""
+    },
+    {
+      "question_id": "c2d3daad-6d3b-4852-8830-39f830f6cd01",
+      "question_type": "recall_user_shared_facts",
+      "topic": "bookRecommendation",
+      "question": "I joined another reading challenge recently.",
+      "correct_answer": "(b)",
+      "llm_answer": "",
+      "correct": false,
+      "error": ""
+    },
+    {
+      "question_id": "96589b76-f0fa-4214-a110-c6f13ef15e83",
+      "question_type": "suggest_new_ideas",
+      "topic": "bookRecommendation",
+      "question": "What new creative writing pursuits could I explore to further engage with other readers and reflect on literary works?",
+      "correct_answer": "(b)",
+      "llm_answer": "",
+      "correct": false,
+      "error": ""
+    },
+    {
+      "question_id": "2b3ce0bd-d0c2-48e3-8cd8-564905e9fe64",
+      "question_type": "provide_preference_aligned_recommendations",
+      "topic": "bookRecommendation",
+      "question": "I'm looking for an activity that can really engage my creative side and allows for some deep contemplation. What would y",
+      "correct_answer": "(c)",
+      "llm_answer": "",
+      "correct": false,
+      "error": ""
+    },
+    {
+      "question_id": "b449e614-d27f-4df4-9fb2-b4726a3423d8",
+      "question_type": "generalizing_to_new_scenarios",
+      "topic": "bookRecommendation",
+      "question": "I'm considering whether I should start scripting my cooking videos or just go with the flow. What do you think?",
+      "correct_answer": "(b)",
+      "llm_answer": "",
+      "correct": false,
+      "error": ""
+    },
+    {
+      "question_id": "3952f3c2-d810-4fd9-a461-8753406142a3",
+      "question_type": "recalling_the_reasons_behind_previous_updates",
+      "topic": "bookRecommendation",
+      "question": "I'm considering whether I should start scripting my cooking videos or just go with the flow. What do you think?",
+      "correct_answer": "(a)",
+      "llm_answer": "",
+      "correct": false,
+      "error": ""
+    },
+    {
+      "question_id": "d71b360e-da59-480b-823e-a83e8c320b9c",
+      "question_type": "generalizing_to_new_scenarios",
+      "topic": "bookRecommendation",
+      "question": "I've been involved in planning events for my community lately, but I'm not sure if I should continue with it. What do yo",
+      "correct_answer": "(c)",
+      "llm_answer": "",
+      "correct": false,
+      "error": ""
+    },
+    {
+      "question_id": "7957ef21-86bb-4641-8a06-4ee2272f1c32",
+      "question_type": "recalling_the_reasons_behind_previous_updates",
+      "topic": "bookRecommendation",
+      "question": "I've been involved in planning events for my community lately, but I'm not sure if I should continue with it. What do yo",
+      "correct_answer": "(d)",
+      "llm_answer": "",
+      "correct": false,
+      "error": ""
+    },
+    {
+      "question_id": "7a4ed201-4f7e-4d9c-a3f3-c5a2b8d424b3",
+      "question_type": "recall_user_shared_facts",
+      "topic": "bookRecommendation",
+      "question": "Yesterday afternoon, I went back to the library and spent some time there.",
+      "correct_answer": "(c)",
+      "llm_answer": "",
+      "correct": false,
+      "error": ""
+    },
+    {
+      "question_id": "afd724f4-8174-48d7-b9cd-34421c581550",
+      "question_type": "provide_preference_aligned_recommendations",
+      "topic": "bookRecommendation",
+      "question": "Hey, I'm planning a weekend getaway and I'm considering attending some unique local events. Could you suggest something ",
+      "correct_answer": "(b)",
+      "llm_answer": "",
+      "correct": false,
+      "error": ""
+    },
+    {
+      "question_id": "32b03409-0710-4afd-89c1-9af72c339b4c",
+      "question_type": "generalizing_to_new_scenarios",
+      "topic": "bookRecommendation",
+      "question": "I've been thinking about joining a 5k race that my friends are signing up for, but I'm not sure if it's something I shou",
+      "correct_answer": "(d)",
+      "llm_answer": "",
+      "correct": false,
+      "error": ""
+    },
+    {
+      "question_id": "346a304a-4371-46ac-a8f7-021f25812b52",
+      "question_type": "generalizing_to_new_scenarios",
+      "topic": "bookRecommendation",
+      "question": "I'm planning a trip soon and am considering whether to visit a large city known for its vibrant nightlife and bustling a",
+      "correct_answer": "(c)",
+      "llm_answer": "",
+      "correct": false,
+      "error": ""
+    },
+    {
+      "question_id": "d90cadc8-e635-462b-8251-7f8a10734376",
+      "question_type": "recall_user_shared_facts",
+      "topic": "bookRecommendation",
+      "question": "I joined another reading challenge recently.",
+      "correct_answer": "(d)",
+      "llm_answer": "",
+      "correct": false,
+      "error": ""
+    },
+    {
+      "question_id": "07873ceb-93a3-45fe-9f72-b0c57fd95802",
+      "question_type": "suggest_new_ideas",
+      "topic": "bookRecommendation",
+      "question": "What new creative writing pursuits could I explore to further engage with other readers and reflect on literary works?",
+      "correct_answer": "(a)",
+      "llm_answer": "",
+      "correct": false,
+      "error": ""
+    },
+    {
+      "question_id": "6c4bc600-04c0-41be-841a-a1e149edd522",
+      "question_type": "provide_preference_aligned_recommendations",
+      "topic": "bookRecommendation",
+      "question": "I'm looking for an activity that can really engage my creative side and allows for some deep contemplation. What would y",
+      "correct_answer": "(d)",
+      "llm_answer": "",
+      "correct": false,
+      "error": ""
+    },
+    {
+      "question_id": "833601fa-de95-4fed-91d6-c9f45d778c84",
+      "question_type": "generalizing_to_new_scenarios",
+      "topic": "bookRecommendation",
+      "question": "I'm considering whether I should start scripting my cooking videos or just go with the flow. What do you think?",
+      "correct_answer": "(c)",
+      "llm_answer": "",
+      "correct": false,
+      "error": ""
+    },
+    {
+      "question_id": "aa2c7800-7f7d-401b-acfa-9af67910f9f7",
+      "question_type": "recalling_the_reasons_behind_previous_updates",
+      "topic": "bookRecommendation",
+      "question": "I'm considering whether I should start scripting my cooking videos or just go with the flow. What do you think?",
+      "correct_answer": "(d)",
+      "llm_answer": "",
+      "correct": false,
+      "error": ""
+    },
+    {
+      "question_id": "2a69f556-c093-4bc3-aa4a-a5acaaec3801",
+      "question_type": "generalizing_to_new_scenarios",
+      "topic": "bookRecommendation",
+      "question": "I've been involved in planning events for my community lately, but I'm not sure if I should continue with it. What do yo",
+      "correct_answer": "(c)",
+      "llm_answer": "",
+      "correct": false,
+      "error": ""
+    },
+    {
+      "question_id": "c7c87a80-78e5-47d8-a068-2bfd244868f1",
+      "question_type": "recalling_the_reasons_behind_previous_updates",
+      "topic": "bookRecommendation",
+      "question": "I've been involved in planning events for my community lately, but I'm not sure if I should continue with it. What do yo",
+      "correct_answer": "(b)",
+      "llm_answer": "",
+      "correct": false,
+      "error": ""
+    },
+    {
+      "question_id": "cffc32b7-fa14-457f-ac4f-9c060bf2aee1",
+      "question_type": "recall_user_shared_facts",
+      "topic": "bookRecommendation",
+      "question": "Yesterday afternoon, I went back to the library and spent some time there.",
+      "correct_answer": "(b)",
+      "llm_answer": "",
+      "correct": false,
+      "error": ""
+    },
+    {
+      "question_id": "856b5927-8865-4bb5-b1ac-38f965024508",
+      "question_type": "provide_preference_aligned_recommendations",
+      "topic": "bookRecommendation",
+      "question": "Hey, I'm planning a weekend getaway and I'm considering attending some unique local events. Could you suggest something ",
+      "correct_answer": "(a)",
+      "llm_answer": "",
+      "correct": false,
+      "error": ""
+    },
+    {
+      "question_id": "66ce550d-37a1-43e5-ab56-0b6864d8cbaf",
+      "question_type": "generalizing_to_new_scenarios",
+      "topic": "bookRecommendation",
+      "question": "I've been thinking about joining a 5k race that my friends are signing up for, but I'm not sure if it's something I shou",
+      "correct_answer": "(b)",
+      "llm_answer": "",
+      "correct": false,
+      "error": ""
+    },
+    {
+      "question_id": "34e7e867-7730-4bb9-9dcf-bc5a93389b3a",
+      "question_type": "generalizing_to_new_scenarios",
+      "topic": "bookRecommendation",
+      "question": "I'm planning a trip soon and am considering whether to visit a large city known for its vibrant nightlife and bustling a",
+      "correct_answer": "(c)",
+      "llm_answer": "",
+      "correct": false,
+      "error": ""
+    },
+    {
+      "question_id": "08430f6d-ada1-46a7-8f15-ddc466ba8a5b",
+      "question_type": "suggest_new_ideas",
+      "topic": "bookRecommendation",
+      "question": "I'm looking for a unique place to spend a quiet afternoon, perhaps somewhere with an interesting atmosphere and a variet",
+      "correct_answer": "(b)",
+      "llm_answer": "",
+      "correct": false,
+      "error": ""
+    },
+    {
+      "question_id": "394bc68d-a4b3-415c-a7d9-6b367fe44e25",
+      "question_type": "recall_user_shared_facts",
+      "topic": "bookRecommendation",
+      "question": "I've been keeping up with my regular schedule at the library these days.",
+      "correct_answer": "(c)",
+      "llm_answer": "",
+      "correct": false,
+      "error": ""
+    }
+  ]
+}

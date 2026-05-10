@@ -1,0 +1,920 @@
+[
+  {
+    "config": "A. decay=OFF  (baseline, topo=ON)",
+    "decay": false,
+    "overall_accuracy": 0.7435897435897436,
+    "correct": 29,
+    "total": 39,
+    "avg_new_ahead": 0.7055555555555556,
+    "scenarios": [
+      {
+        "name": "Tech Stack 30d (project_tech)",
+        "accuracy": 1.0,
+        "correct": 3,
+        "total": 3,
+        "new_ahead_ratio": 0.3333333333333333,
+        "pairs_tested": 3,
+        "edge_pairs": 1
+      },
+      {
+        "name": "饮食偏好 120d (personal_info)",
+        "accuracy": 0.6666666666666666,
+        "correct": 2,
+        "total": 3,
+        "new_ahead_ratio": 0.3333333333333333,
+        "pairs_tested": 6,
+        "edge_pairs": 2
+      },
+      {
+        "name": "Bug 10d (bugs_issues)",
+        "accuracy": 1.0,
+        "correct": 2,
+        "total": 2,
+        "new_ahead_ratio": 1.0,
+        "pairs_tested": 2,
+        "edge_pairs": 1
+      },
+      {
+        "name": "Sprint 5d (meeting_notes)",
+        "accuracy": 1.0,
+        "correct": 2,
+        "total": 2,
+        "new_ahead_ratio": 0.5,
+        "pairs_tested": 2,
+        "edge_pairs": 1
+      },
+      {
+        "name": "3段部署演进 (project_tech)",
+        "accuracy": 0.6666666666666666,
+        "correct": 2,
+        "total": 3,
+        "new_ahead_ratio": 0.75,
+        "pairs_tested": 4,
+        "edge_pairs": 2
+      },
+      {
+        "name": "Anchor 冲突 (personal_info)",
+        "accuracy": 0.3333333333333333,
+        "correct": 1,
+        "total": 3,
+        "new_ahead_ratio": 1.0,
+        "pairs_tested": 2,
+        "edge_pairs": 2
+      },
+      {
+        "name": "跨场域隔离 — MySQL 检索隔离",
+        "accuracy": 1.0,
+        "correct": 2,
+        "total": 2,
+        "new_ahead_ratio": 0.0,
+        "pairs_tested": 1,
+        "edge_pairs": 1
+      },
+      {
+        "name": "部分更新 — 仅后端 (project_tech)",
+        "accuracy": 1.0,
+        "correct": 2,
+        "total": 2,
+        "new_ahead_ratio": 1.0,
+        "pairs_tested": 2,
+        "edge_pairs": 1
+      },
+      {
+        "name": "隐式漂移 — 无显式切换 (personal_info)",
+        "accuracy": 0.6666666666666666,
+        "correct": 2,
+        "total": 3,
+        "new_ahead_ratio": 1.0,
+        "pairs_tested": 4,
+        "edge_pairs": 2
+      },
+      {
+        "name": "超长衰减 365d (personal_info)",
+        "accuracy": 0.5,
+        "correct": 1,
+        "total": 2,
+        "new_ahead_ratio": 1.0,
+        "pairs_tested": 1,
+        "edge_pairs": 1
+      },
+      {
+        "name": "噪声会话干扰 (project_tech, 14d + noise)",
+        "accuracy": 1.0,
+        "correct": 3,
+        "total": 3,
+        "new_ahead_ratio": 0.2,
+        "pairs_tested": 5,
+        "edge_pairs": 3
+      },
+      {
+        "name": "多维度同步演化 (personal_info, 60d, 3 tracks)",
+        "accuracy": 0.3333333333333333,
+        "correct": 1,
+        "total": 3,
+        "new_ahead_ratio": 1.0,
+        "pairs_tested": 1,
+        "edge_pairs": 3
+      },
+      {
+        "name": "半衰期边界 bugs 6d vs 8d (half=7d)",
+        "accuracy": 1.0,
+        "correct": 2,
+        "total": 2,
+        "new_ahead_ratio": 1.0,
+        "pairs_tested": 4,
+        "edge_pairs": 2
+      },
+      {
+        "name": "半衰期边界 project_tech 55d vs 65d (half=60d)",
+        "accuracy": 0.6666666666666666,
+        "correct": 2,
+        "total": 3,
+        "new_ahead_ratio": 0.8,
+        "pairs_tested": 5,
+        "edge_pairs": 2
+      },
+      {
+        "name": "快速连续修正 (personal_info, 3d to 0d)",
+        "accuracy": 0.6666666666666666,
+        "correct": 2,
+        "total": 3,
+        "new_ahead_ratio": 0.6666666666666666,
+        "pairs_tested": 3,
+        "edge_pairs": 2
+      }
+    ],
+    "results": [
+      {
+        "question": "What code editor does the user currently use?",
+        "correct_answer": "(b)",
+        "llm_answer": "(b)",
+        "correct": true,
+        "error": "",
+        "recall_count": 3
+      },
+      {
+        "question": "What editor did the user use before switching?",
+        "correct_answer": "(a)",
+        "llm_answer": "(a)",
+        "correct": true,
+        "error": "",
+        "recall_count": 3
+      },
+      {
+        "question": "Why did the user switch editors?",
+        "correct_answer": "(b)",
+        "llm_answer": "(b)",
+        "correct": true,
+        "error": "",
+        "recall_count": 4
+      },
+      {
+        "question": "What does the user drink now?",
+        "correct_answer": "(b)",
+        "llm_answer": "(a)",
+        "correct": false,
+        "error": "",
+        "recall_count": 5
+      },
+      {
+        "question": "What cuisine does the user prefer now?",
+        "correct_answer": "(b)",
+        "llm_answer": "(b)",
+        "correct": true,
+        "error": "",
+        "recall_count": 5
+      },
+      {
+        "question": "Why did the user change their diet?",
+        "correct_answer": "(b)",
+        "llm_answer": "(b)",
+        "correct": true,
+        "error": "",
+        "recall_count": 5
+      },
+      {
+        "question": "What is the current status of the iOS Safari login bug?",
+        "correct_answer": "(b)",
+        "llm_answer": "(b)",
+        "correct": true,
+        "error": "",
+        "recall_count": 5
+      },
+      {
+        "question": "What was the original bug symptom?",
+        "correct_answer": "(b)",
+        "llm_answer": "(b)",
+        "correct": true,
+        "error": "",
+        "recall_count": 5
+      },
+      {
+        "question": "What is the current sprint focus?",
+        "correct_answer": "(b)",
+        "llm_answer": "(b)",
+        "correct": true,
+        "error": "",
+        "recall_count": 5
+      },
+      {
+        "question": "What was the previous sprint goal?",
+        "correct_answer": "(a)",
+        "llm_answer": "(a)",
+        "correct": true,
+        "error": "",
+        "recall_count": 5
+      },
+      {
+        "question": "What is the user's CURRENT deployment method?",
+        "correct_answer": "(c)",
+        "llm_answer": "(b)",
+        "correct": false,
+        "error": "",
+        "recall_count": 5
+      },
+      {
+        "question": "What deployment method did the user use FIRST?",
+        "correct_answer": "(a)",
+        "llm_answer": "(a)",
+        "correct": true,
+        "error": "",
+        "recall_count": 5
+      },
+      {
+        "question": "What did the user migrate FROM to get to Kubernetes?",
+        "correct_answer": "(b)",
+        "llm_answer": "(b)",
+        "correct": true,
+        "error": "",
+        "recall_count": 5
+      },
+      {
+        "question": "What is the user's current diet preference?",
+        "correct_answer": "(b)",
+        "llm_answer": "(b)",
+        "correct": true,
+        "error": "",
+        "recall_count": 5
+      },
+      {
+        "question": "What was the user's previous diet?",
+        "correct_answer": "(a)",
+        "llm_answer": "(d)",
+        "correct": false,
+        "error": "",
+        "recall_count": 5
+      },
+      {
+        "question": "What does the user drink with meals now?",
+        "correct_answer": "(b)",
+        "llm_answer": "(a)",
+        "correct": false,
+        "error": "",
+        "recall_count": 5
+      },
+      {
+        "question": "What search technology does the project currently use?",
+        "correct_answer": "(b)",
+        "llm_answer": "(b)",
+        "correct": true,
+        "error": "",
+        "recall_count": 5
+      },
+      {
+        "question": "What personal item does the user own?",
+        "correct_answer": "(b)",
+        "llm_answer": "(b)",
+        "correct": true,
+        "error": "",
+        "recall_count": 5
+      },
+      {
+        "question": "What backend framework does the user currently use?",
+        "correct_answer": "(b)",
+        "llm_answer": "(b)",
+        "correct": true,
+        "error": "",
+        "recall_count": 5
+      },
+      {
+        "question": "What frontend framework does the user use?",
+        "correct_answer": "(a)",
+        "llm_answer": "(a)",
+        "correct": true,
+        "error": "",
+        "recall_count": 5
+      },
+      {
+        "question": "What entertainment does the user currently prefer?",
+        "correct_answer": "(b)",
+        "llm_answer": "(b)",
+        "correct": true,
+        "error": "",
+        "recall_count": 5
+      },
+      {
+        "question": "What music is the user currently into?",
+        "correct_answer": "(b)",
+        "llm_answer": "(b)",
+        "correct": true,
+        "error": "",
+        "recall_count": 5
+      },
+      {
+        "question": "What was the user's previous evening activity?",
+        "correct_answer": "(a)",
+        "llm_answer": "(b)",
+        "correct": false,
+        "error": "",
+        "recall_count": 5
+      },
+      {
+        "question": "What genre does the user currently read?",
+        "correct_answer": "(b)",
+        "llm_answer": "(b)",
+        "correct": true,
+        "error": "",
+        "recall_count": 5
+      },
+      {
+        "question": "What was the user's previous reading preference?",
+        "correct_answer": "(a)",
+        "llm_answer": "(c) Poetry",
+        "correct": false,
+        "error": "",
+        "recall_count": 5
+      },
+      {
+        "question": "What database does the user currently use for flexible schemas?",
+        "correct_answer": "(b)",
+        "llm_answer": "(b)",
+        "correct": true,
+        "error": "",
+        "recall_count": 5
+      },
+      {
+        "question": "What monitoring solution does the user use now?",
+        "correct_answer": "(b)",
+        "llm_answer": "(b)",
+        "correct": true,
+        "error": "",
+        "recall_count": 5
+      },
+      {
+        "question": "How does the user handle authentication now?",
+        "correct_answer": "(b)",
+        "llm_answer": "(b)",
+        "correct": true,
+        "error": "",
+        "recall_count": 5
+      },
+      {
+        "question": "What exercise does the user currently do?",
+        "correct_answer": "(b)",
+        "llm_answer": "(d) Yoga",
+        "correct": false,
+        "error": "",
+        "recall_count": 5
+      },
+      {
+        "question": "What genre does the user currently watch?",
+        "correct_answer": "(b)",
+        "llm_answer": "(a)",
+        "correct": false,
+        "error": "",
+        "recall_count": 5
+      },
+      {
+        "question": "What does the user eat for breakfast now?",
+        "correct_answer": "(b)",
+        "llm_answer": "(b)",
+        "correct": true,
+        "error": "",
+        "recall_count": 5
+      },
+      {
+        "question": "Which bug was reported EARLIER?",
+        "correct_answer": "(a)",
+        "llm_answer": "(a)",
+        "correct": true,
+        "error": "",
+        "recall_count": 5
+      },
+      {
+        "question": "What is the status of both bugs?",
+        "correct_answer": "(b)",
+        "llm_answer": "(b)",
+        "correct": true,
+        "error": "",
+        "recall_count": 5
+      },
+      {
+        "question": "What infrastructure does the user CURRENTLY use?",
+        "correct_answer": "(c)",
+        "llm_answer": "(b)",
+        "correct": false,
+        "error": "",
+        "recall_count": 5
+      },
+      {
+        "question": "What did the user use BEFORE EC2?",
+        "correct_answer": "(a)",
+        "llm_answer": "(a)",
+        "correct": true,
+        "error": "",
+        "recall_count": 5
+      },
+      {
+        "question": "What infrastructure did the user migrate FROM to get to Fargate?",
+        "correct_answer": "(b)",
+        "llm_answer": "(b)",
+        "correct": true,
+        "error": "",
+        "recall_count": 5
+      },
+      {
+        "question": "What instrument does the user want to learn NOW?",
+        "correct_answer": "(c)",
+        "llm_answer": "(c)",
+        "correct": true,
+        "error": "",
+        "recall_count": 5
+      },
+      {
+        "question": "What was the user's FIRST choice of instrument?",
+        "correct_answer": "(a)",
+        "llm_answer": "(b)",
+        "correct": false,
+        "error": "",
+        "recall_count": 5
+      },
+      {
+        "question": "Why did the user settle on drums?",
+        "correct_answer": "(b)",
+        "llm_answer": "(b)",
+        "correct": true,
+        "error": "",
+        "recall_count": 5
+      }
+    ]
+  },
+  {
+    "config": "B. decay=ON   (衰减底限0.7, topo=ON, contradicted=0.8)",
+    "decay": true,
+    "overall_accuracy": 0.7692307692307693,
+    "correct": 30,
+    "total": 39,
+    "avg_new_ahead": 0.7944444444444444,
+    "scenarios": [
+      {
+        "name": "Tech Stack 30d (project_tech)",
+        "accuracy": 1.0,
+        "correct": 3,
+        "total": 3,
+        "new_ahead_ratio": 0.3333333333333333,
+        "pairs_tested": 3,
+        "edge_pairs": 1
+      },
+      {
+        "name": "饮食偏好 120d (personal_info)",
+        "accuracy": 0.6666666666666666,
+        "correct": 2,
+        "total": 3,
+        "new_ahead_ratio": 0.3333333333333333,
+        "pairs_tested": 6,
+        "edge_pairs": 2
+      },
+      {
+        "name": "Bug 10d (bugs_issues)",
+        "accuracy": 1.0,
+        "correct": 2,
+        "total": 2,
+        "new_ahead_ratio": 1.0,
+        "pairs_tested": 2,
+        "edge_pairs": 1
+      },
+      {
+        "name": "Sprint 5d (meeting_notes)",
+        "accuracy": 1.0,
+        "correct": 2,
+        "total": 2,
+        "new_ahead_ratio": 0.5,
+        "pairs_tested": 2,
+        "edge_pairs": 1
+      },
+      {
+        "name": "3段部署演进 (project_tech)",
+        "accuracy": 0.6666666666666666,
+        "correct": 2,
+        "total": 3,
+        "new_ahead_ratio": 1.0,
+        "pairs_tested": 4,
+        "edge_pairs": 2
+      },
+      {
+        "name": "Anchor 冲突 (personal_info)",
+        "accuracy": 0.3333333333333333,
+        "correct": 1,
+        "total": 3,
+        "new_ahead_ratio": 1.0,
+        "pairs_tested": 2,
+        "edge_pairs": 2
+      },
+      {
+        "name": "跨场域隔离 — MySQL 检索隔离",
+        "accuracy": 1.0,
+        "correct": 2,
+        "total": 2,
+        "new_ahead_ratio": 1.0,
+        "pairs_tested": 1,
+        "edge_pairs": 1
+      },
+      {
+        "name": "部分更新 — 仅后端 (project_tech)",
+        "accuracy": 1.0,
+        "correct": 2,
+        "total": 2,
+        "new_ahead_ratio": 1.0,
+        "pairs_tested": 2,
+        "edge_pairs": 1
+      },
+      {
+        "name": "隐式漂移 — 无显式切换 (personal_info)",
+        "accuracy": 1.0,
+        "correct": 3,
+        "total": 3,
+        "new_ahead_ratio": 1.0,
+        "pairs_tested": 4,
+        "edge_pairs": 2
+      },
+      {
+        "name": "超长衰减 365d (personal_info)",
+        "accuracy": 0.5,
+        "correct": 1,
+        "total": 2,
+        "new_ahead_ratio": 1.0,
+        "pairs_tested": 1,
+        "edge_pairs": 1
+      },
+      {
+        "name": "噪声会话干扰 (project_tech, 14d + noise)",
+        "accuracy": 1.0,
+        "correct": 3,
+        "total": 3,
+        "new_ahead_ratio": 0.2,
+        "pairs_tested": 5,
+        "edge_pairs": 3
+      },
+      {
+        "name": "多维度同步演化 (personal_info, 60d, 3 tracks)",
+        "accuracy": 0.3333333333333333,
+        "correct": 1,
+        "total": 3,
+        "new_ahead_ratio": 1.0,
+        "pairs_tested": 2,
+        "edge_pairs": 3
+      },
+      {
+        "name": "半衰期边界 bugs 6d vs 8d (half=7d)",
+        "accuracy": 1.0,
+        "correct": 2,
+        "total": 2,
+        "new_ahead_ratio": 1.0,
+        "pairs_tested": 4,
+        "edge_pairs": 2
+      },
+      {
+        "name": "半衰期边界 project_tech 55d vs 65d (half=60d)",
+        "accuracy": 0.6666666666666666,
+        "correct": 2,
+        "total": 3,
+        "new_ahead_ratio": 0.8,
+        "pairs_tested": 5,
+        "edge_pairs": 2
+      },
+      {
+        "name": "快速连续修正 (personal_info, 3d to 0d)",
+        "accuracy": 0.6666666666666666,
+        "correct": 2,
+        "total": 3,
+        "new_ahead_ratio": 0.75,
+        "pairs_tested": 4,
+        "edge_pairs": 2
+      }
+    ],
+    "results": [
+      {
+        "question": "What code editor does the user currently use?",
+        "correct_answer": "(b)",
+        "llm_answer": "(b)",
+        "correct": true,
+        "error": "",
+        "recall_count": 3
+      },
+      {
+        "question": "What editor did the user use before switching?",
+        "correct_answer": "(a)",
+        "llm_answer": "(a)",
+        "correct": true,
+        "error": "",
+        "recall_count": 3
+      },
+      {
+        "question": "Why did the user switch editors?",
+        "correct_answer": "(b)",
+        "llm_answer": "(b)",
+        "correct": true,
+        "error": "",
+        "recall_count": 4
+      },
+      {
+        "question": "What does the user drink now?",
+        "correct_answer": "(b)",
+        "llm_answer": "(a)",
+        "correct": false,
+        "error": "",
+        "recall_count": 5
+      },
+      {
+        "question": "What cuisine does the user prefer now?",
+        "correct_answer": "(b)",
+        "llm_answer": "(b)",
+        "correct": true,
+        "error": "",
+        "recall_count": 5
+      },
+      {
+        "question": "Why did the user change their diet?",
+        "correct_answer": "(b)",
+        "llm_answer": "(b)",
+        "correct": true,
+        "error": "",
+        "recall_count": 5
+      },
+      {
+        "question": "What is the current status of the iOS Safari login bug?",
+        "correct_answer": "(b)",
+        "llm_answer": "(b)",
+        "correct": true,
+        "error": "",
+        "recall_count": 5
+      },
+      {
+        "question": "What was the original bug symptom?",
+        "correct_answer": "(b)",
+        "llm_answer": "(b)",
+        "correct": true,
+        "error": "",
+        "recall_count": 5
+      },
+      {
+        "question": "What is the current sprint focus?",
+        "correct_answer": "(b)",
+        "llm_answer": "(b)",
+        "correct": true,
+        "error": "",
+        "recall_count": 5
+      },
+      {
+        "question": "What was the previous sprint goal?",
+        "correct_answer": "(a)",
+        "llm_answer": "(a)",
+        "correct": true,
+        "error": "",
+        "recall_count": 5
+      },
+      {
+        "question": "What is the user's CURRENT deployment method?",
+        "correct_answer": "(c)",
+        "llm_answer": "(b)",
+        "correct": false,
+        "error": "",
+        "recall_count": 5
+      },
+      {
+        "question": "What deployment method did the user use FIRST?",
+        "correct_answer": "(a)",
+        "llm_answer": "(a)",
+        "correct": true,
+        "error": "",
+        "recall_count": 5
+      },
+      {
+        "question": "What did the user migrate FROM to get to Kubernetes?",
+        "correct_answer": "(b)",
+        "llm_answer": "(b)",
+        "correct": true,
+        "error": "",
+        "recall_count": 5
+      },
+      {
+        "question": "What is the user's current diet preference?",
+        "correct_answer": "(b)",
+        "llm_answer": "(b)",
+        "correct": true,
+        "error": "",
+        "recall_count": 5
+      },
+      {
+        "question": "What was the user's previous diet?",
+        "correct_answer": "(a)",
+        "llm_answer": "(d)",
+        "correct": false,
+        "error": "",
+        "recall_count": 5
+      },
+      {
+        "question": "What does the user drink with meals now?",
+        "correct_answer": "(b)",
+        "llm_answer": "(a)",
+        "correct": false,
+        "error": "",
+        "recall_count": 5
+      },
+      {
+        "question": "What search technology does the project currently use?",
+        "correct_answer": "(b)",
+        "llm_answer": "(b)",
+        "correct": true,
+        "error": "",
+        "recall_count": 5
+      },
+      {
+        "question": "What personal item does the user own?",
+        "correct_answer": "(b)",
+        "llm_answer": "(b)",
+        "correct": true,
+        "error": "",
+        "recall_count": 5
+      },
+      {
+        "question": "What backend framework does the user currently use?",
+        "correct_answer": "(b)",
+        "llm_answer": "(b)",
+        "correct": true,
+        "error": "",
+        "recall_count": 5
+      },
+      {
+        "question": "What frontend framework does the user use?",
+        "correct_answer": "(a)",
+        "llm_answer": "(a)",
+        "correct": true,
+        "error": "",
+        "recall_count": 5
+      },
+      {
+        "question": "What entertainment does the user currently prefer?",
+        "correct_answer": "(b)",
+        "llm_answer": "(b)",
+        "correct": true,
+        "error": "",
+        "recall_count": 5
+      },
+      {
+        "question": "What music is the user currently into?",
+        "correct_answer": "(b)",
+        "llm_answer": "(b)",
+        "correct": true,
+        "error": "",
+        "recall_count": 5
+      },
+      {
+        "question": "What was the user's previous evening activity?",
+        "correct_answer": "(a)",
+        "llm_answer": "(a)",
+        "correct": true,
+        "error": "",
+        "recall_count": 5
+      },
+      {
+        "question": "What genre does the user currently read?",
+        "correct_answer": "(b)",
+        "llm_answer": "(b)",
+        "correct": true,
+        "error": "",
+        "recall_count": 5
+      },
+      {
+        "question": "What was the user's previous reading preference?",
+        "correct_answer": "(a)",
+        "llm_answer": "(c) Poetry",
+        "correct": false,
+        "error": "",
+        "recall_count": 5
+      },
+      {
+        "question": "What database does the user currently use for flexible schemas?",
+        "correct_answer": "(b)",
+        "llm_answer": "(b)",
+        "correct": true,
+        "error": "",
+        "recall_count": 5
+      },
+      {
+        "question": "What monitoring solution does the user use now?",
+        "correct_answer": "(b)",
+        "llm_answer": "(b)",
+        "correct": true,
+        "error": "",
+        "recall_count": 5
+      },
+      {
+        "question": "How does the user handle authentication now?",
+        "correct_answer": "(b)",
+        "llm_answer": "(b)",
+        "correct": true,
+        "error": "",
+        "recall_count": 5
+      },
+      {
+        "question": "What exercise does the user currently do?",
+        "correct_answer": "(b)",
+        "llm_answer": "(d) Yoga",
+        "correct": false,
+        "error": "",
+        "recall_count": 5
+      },
+      {
+        "question": "What genre does the user currently watch?",
+        "correct_answer": "(b)",
+        "llm_answer": "(a)",
+        "correct": false,
+        "error": "",
+        "recall_count": 5
+      },
+      {
+        "question": "What does the user eat for breakfast now?",
+        "correct_answer": "(b)",
+        "llm_answer": "(b)",
+        "correct": true,
+        "error": "",
+        "recall_count": 5
+      },
+      {
+        "question": "Which bug was reported EARLIER?",
+        "correct_answer": "(a)",
+        "llm_answer": "(a)",
+        "correct": true,
+        "error": "",
+        "recall_count": 5
+      },
+      {
+        "question": "What is the status of both bugs?",
+        "correct_answer": "(b)",
+        "llm_answer": "(b)",
+        "correct": true,
+        "error": "",
+        "recall_count": 5
+      },
+      {
+        "question": "What infrastructure does the user CURRENTLY use?",
+        "correct_answer": "(c)",
+        "llm_answer": "(b)",
+        "correct": false,
+        "error": "",
+        "recall_count": 5
+      },
+      {
+        "question": "What did the user use BEFORE EC2?",
+        "correct_answer": "(a)",
+        "llm_answer": "(a)",
+        "correct": true,
+        "error": "",
+        "recall_count": 5
+      },
+      {
+        "question": "What infrastructure did the user migrate FROM to get to Fargate?",
+        "correct_answer": "(b)",
+        "llm_answer": "(b)",
+        "correct": true,
+        "error": "",
+        "recall_count": 5
+      },
+      {
+        "question": "What instrument does the user want to learn NOW?",
+        "correct_answer": "(c)",
+        "llm_answer": "(c)",
+        "correct": true,
+        "error": "",
+        "recall_count": 5
+      },
+      {
+        "question": "What was the user's FIRST choice of instrument?",
+        "correct_answer": "(a)",
+        "llm_answer": "(b)",
+        "correct": false,
+        "error": "",
+        "recall_count": 5
+      },
+      {
+        "question": "Why did the user settle on drums?",
+        "correct_answer": "(b)",
+        "llm_answer": "(b)",
+        "correct": true,
+        "error": "",
+        "recall_count": 5
+      }
+    ]
+  }
+]
