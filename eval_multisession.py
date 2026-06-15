@@ -2,17 +2,12 @@
 """
 多会话偏好修正 Benchmark Runner
 
-从 JSON 场景文件加载，评估时间衰减（底限制）+ 拓扑渲染 + 软 Anchor：
-
-  A. decay=OFF  (baseline)
-  B. decay=ON   (衰减底限 0.7 + contradicted 0.8 + 拓扑渲染)
-
-拓扑渲染始终开启（format_for_prompt 标注演化链），不再作为消融维度。
+从 JSON 场景文件加载，评估图拓扑渲染（contradicted + echoed + field 强度）。
+记忆不再随时间衰减，锚定不再参与 ranking——排序完全由查询匹配 + 图结构决定。
 
 Usage:
-    python eval_multisession.py                          # 默认 JSON + 全部配置
+    python eval_multisession.py                          # 默认 JSON
     python eval_multisession.py --dry-run                 # 仅检索排序
-    python eval_multisession.py --config A                # 仅 baseline
     python eval_multisession.py --scenarios my_test.json  # 自定义场景
 """
 
@@ -263,10 +258,9 @@ def check_recall_ranking(mh: DyadCore, scenario: dict, info: dict) -> dict:
 
 def evaluate_one_config(mh_factory, llm: Optional[LLMClient],
                         label: str) -> dict:
-    """评估一个配置：decay 由 mh_factory 控制，拓扑渲染始终开启。"""
+    """评估一个配置：拓扑渲染始终开启，记忆不随时间衰减。"""
     _clean_db()
     mh = mh_factory()
-    decay_on = mh.decay_enabled
 
     all_results = []
     scenario_summaries = []
@@ -335,7 +329,6 @@ def evaluate_one_config(mh_factory, llm: Optional[LLMClient],
 
     return {
         "config": label,
-        "decay": decay_on,
         "overall_accuracy": overall_accuracy,
         "correct": total_correct,
         "total": total_questions,
@@ -367,40 +360,27 @@ def print_report(all_configs: list[dict]):
     print(f"{'='*72}")
 
     # Header
-    print(f"\n  {'Config':<36s} {'Decay':<6s} {'Acc':>7s}  {'New>Ahead':>9s}")
-    print(f"  {'-'*64}")
+    print(f"\n  {'Config':<36s} {'Acc':>7s}  {'New>Ahead':>9s}")
+    print(f"  {'-'*56}")
 
     for cfg in all_configs:
         print(f"  {cfg['config']:<36s} "
-              f"{'ON' if cfg['decay'] else 'OFF':<6s} "
               f"{cfg['overall_accuracy']:6.1%}  "
               f"{cfg['avg_new_ahead']:8.1%}")
 
-    # Check for expected improvement
-    if len(all_configs) >= 2:
-        baseline = all_configs[0]
-        full = all_configs[1]
-        if full["overall_accuracy"] > baseline["overall_accuracy"]:
-            delta = full["overall_accuracy"] - baseline["overall_accuracy"]
-            print(f"\n  Decay+Topo improvement over baseline: +{delta:.1%}")
-        if full["avg_new_ahead"] > baseline["avg_new_ahead"]:
-            delta = full["avg_new_ahead"] - baseline["avg_new_ahead"]
-            print(f"  New-ahead improvement over baseline: +{delta:.1%}")
+    # Per-scenario breakdown
+    print(f"\n  --- 场景分解 ---")
+    for cfg in all_configs:
+        print(f"  Config: {cfg['config']}")
+        for sc in cfg["scenarios"]:
+            print(f"  {sc['name']:<50s} {sc['accuracy']:.1%}  "
+                  f"({sc['correct']}/{sc['total']})  "
+                  f"new_ahead={sc['new_ahead_ratio']:.1%}  edges={sc['edge_pairs']}")
 
-    # Per-scenario breakdown for best config
-    print(f"\n  --- 最佳配置场景分解 ---")
-    best = max(all_configs, key=lambda c: c["overall_accuracy"])
-    print(f"  Config: {best['config']}")
-    for sc in best["scenarios"]:
-        print(f"  {sc['name']:<50s} {sc['accuracy']:.1%}  "
-              f"({sc['correct']}/{sc['total']})  "
-              f"new_ahead={sc['new_ahead_ratio']:.1%}  edges={sc['edge_pairs']}")
-
-    # Detailed errors for decay config (most feature-rich)
-    decay_cfg = [c for c in all_configs if c["decay"]]
-    if decay_cfg:
-        print(f"\n  --- 完整系统错题详情 ---")
-        cfg = decay_cfg[0]
+    # Detailed errors
+    if all_configs:
+        print(f"\n  --- 错题详情 ---")
+        cfg = all_configs[0]
         for r in cfg["results"]:
             if not r["correct"] and not r.get("error"):
                 print(f"  [XX] Q: {r['question'][:80]}")
@@ -465,17 +445,13 @@ def main():
             sys.exit(1)
         print(f"  筛选场景: {SCENARIOS[0]['name']}")
 
-    # 工厂函数
-    def make_mh_decay_on():
-        return DyadCore(DB_PATH, decay_enabled=True)
-
-    def make_mh_decay_off():
-        return DyadCore(DB_PATH, decay_enabled=False)
+    # 工厂函数 — 记忆不随时间衰减，排序仅依赖图拓扑
+    def make_mh():
+        return DyadCore(DB_PATH)
 
     # 配置矩阵 — 拓扑渲染始终开启
     all_configs_defs = [
-        ("A. decay=OFF  (baseline, topo=ON)", make_mh_decay_off),
-        ("B. decay=ON   (衰减底限0.7, topo=ON, contradicted=0.8)", make_mh_decay_on),
+        ("A. topo=ON  (contradicted + echoed + field strength)", make_mh),
     ]
 
     if args.config:

@@ -9,7 +9,6 @@ Usage:
     python longmemeval_adapter.py                      # 全量 knowledge-update + preference (108题)
     python longmemeval_adapter.py --limit 20            # 前 20 题
     python longmemeval_adapter.py --question-type knowledge-update
-    python longmemeval_adapter.py --decay-off           # 关闭衰减（消融）
     python longmemeval_adapter.py --dry-run             # 只看检索不看 LLM
 
 环境变量：
@@ -172,10 +171,9 @@ def load_longmemeval(question_types: Optional[list[str]] = None,
 # ---------------------------------------------------------------------------
 class LongMemEvalAdapter:
     def __init__(self, llm: LLMClient, db_path: str = DB_PATH,
-                 decay_enabled: bool = True, use_judge: bool = True):
+                 use_judge: bool = True):
         self.llm = llm
         self.db_path = db_path
-        self.decay_enabled = decay_enabled
         self.use_judge = use_judge
         self.mh: Optional[DyadCore] = None
         self._results: list[dict] = []
@@ -224,7 +222,7 @@ class LongMemEvalAdapter:
             p = self.db_path + suffix
             if os.path.exists(p):
                 os.remove(p)
-        self.mh = DyadCore(self.db_path, decay_enabled=self.decay_enabled)
+        self.mh = DyadCore(self.db_path)
 
     def _write_sessions(self, example: dict):
         """Write all haystack sessions to DyadCore with timestamps."""
@@ -409,7 +407,6 @@ class LongMemEvalAdapter:
             "total_questions": len(results),
             "valid_answers": total,
             "errors": len(errors),
-            "decay_enabled": self.decay_enabled,
             "by_question_type": {
                 qt: {"accuracy": d["correct"] / max(d["total"], 1),
                      "correct": d["correct"], "total": d["total"]}
@@ -436,8 +433,6 @@ def main():
                         help="Filter: knowledge-update, single-session-preference, etc.")
     parser.add_argument("--question-types", type=str, default=None,
                         help="Comma-separated: knowledge-update,single-session-preference")
-    parser.add_argument("--decay-off", action="store_true",
-                        help="Disable time decay for ablation")
     parser.add_argument("--no-judge", action="store_true",
                         help="Skip LLM judge (keyword scoring only)")
     parser.add_argument("--dry-run", action="store_true")
@@ -470,21 +465,19 @@ def main():
         llm = LLMClient(base_url=base_url, api_key=api_key, model=model)
 
     # Evaluate
-    decay_label = "OFF" if args.decay_off else "ON"
-    print(f"\n  Time Decay: {decay_label}")
     print(f"  Question types: {question_types}")
     print(f"  LLM Judge: {not args.no_judge}")
     print()
 
     adapter = LongMemEvalAdapter(
-        llm, decay_enabled=not args.decay_off,
+        llm,
         use_judge=not args.no_judge and not args.dry_run,
     )
     metrics = adapter.evaluate(examples, dry_run=args.dry_run)
 
     # Report
     print(f"\n{'='*64}")
-    print(f"  LongMemEval Results (decay={decay_label})")
+    print(f"  LongMemEval Results")
     print(f"{'='*64}")
     print(f"  Keyword Accuracy: {metrics['keyword_accuracy']:.1%} "
           f"({sum(1 for r in adapter._results if r.get('keyword_correct'))}/{metrics['valid_answers']})")

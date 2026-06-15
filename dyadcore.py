@@ -40,10 +40,9 @@ class DyadCore:
         dc.close()
     """
 
-    def __init__(self, db_path: str = "dyadcore.db", decay_enabled: bool = True,
+    def __init__(self, db_path: str = "dyadcore.db",
                  contradicted_enabled: bool = True, echoed_enabled: bool = True):
         self.db_path = db_path
-        self.decay_enabled = decay_enabled
         self.contradicted_enabled = contradicted_enabled
         self.echoed_enabled = echoed_enabled
         self.conn = sqlite3.connect(db_path)
@@ -76,6 +75,7 @@ class DyadCore:
           - memories: 用户和 Agent 的对等痕迹表
           - memory_fts: FTS5 trigram 全文索引
           - reflections: 跨轨迹关系边
+          - beliefs: 从图拓扑中涌现的认知状态（闭环断点 ③）
         """
         self.conn.executescript("""
             CREATE TABLE IF NOT EXISTS memories (
@@ -131,6 +131,27 @@ class DyadCore:
             CREATE INDEX IF NOT EXISTS idx_memories_accessed ON memories(accessed_at);
             CREATE INDEX IF NOT EXISTS idx_memories_created ON memories(created_at);
             CREATE INDEX IF NOT EXISTS idx_memories_source ON memories(source);
+
+            CREATE TABLE IF NOT EXISTS beliefs (
+                id INTEGER PRIMARY KEY,
+                subject TEXT NOT NULL,
+                statement TEXT NOT NULL,
+                field TEXT,
+                confidence REAL DEFAULT 0.5,
+                evidence_ids TEXT NOT NULL DEFAULT '[]',
+                contradicted_by TEXT DEFAULT '[]',
+                verification_status TEXT DEFAULT 'unverified'
+                    CHECK(verification_status IN ('confirmed', 'contested', 'unverified', 'stale')),
+                source TEXT DEFAULT 'auto'
+                    CHECK(source IN ('auto', 'manual')),
+                superseded_by INTEGER DEFAULT 0,
+                created_at REAL DEFAULT (strftime('%s', 'now')),
+                updated_at REAL DEFAULT (strftime('%s', 'now'))
+            );
+
+            CREATE INDEX IF NOT EXISTS idx_beliefs_field ON beliefs(field);
+            CREATE INDEX IF NOT EXISTS idx_beliefs_subject ON beliefs(subject);
+            CREATE INDEX IF NOT EXISTS idx_beliefs_status ON beliefs(verification_status);
         """)
 
     # ------------------------------------------------------------------
@@ -246,23 +267,145 @@ class DyadCore:
         )
 
     # ------------------------------------------------------------------
+    # Beliefs — 从图拓扑涌现的认知状态
+    # ------------------------------------------------------------------
+
+    def get_beliefs(
+        self, field: Optional[str] = None, subject: Optional[str] = None,
+        status: Optional[str] = None, include_superseded: bool = False
+    ) -> list[dict]:
+        """查询 beliefs，可按 field/subject/status 过滤。
+
+        返回按 confidence DESC 排序的信念列表。
+        """
+        conditions = []
+        params: list = []
+        if not include_superseded:
+            conditions.append("superseded_by = 0")
+        if field is not None:
+            conditions.append("field = ?")
+            params.append(field)
+        if subject is not None:
+            conditions.append("subject = ?")
+            params.append(subject)
+        if status is not None:
+            conditions.append("verification_status = ?")
+            params.append(status)
+
+        where = f"WHERE {' AND '.join(conditions)}" if conditions else ""
+        rows = self.conn.execute(
+            f"SELECT * FROM beliefs {where} ORDER BY confidence DESC",
+            params
+        ).fetchall()
+        return self._rows_to_dicts(rows)
+
+    def get_belief(self, belief_id: int) -> Optional[dict]:
+        """获取单个 belief。"""
+        row = self.conn.execute(
+            "SELECT * FROM beliefs WHERE id = ?", (belief_id,)
+        ).fetchone()
+        return self._row_to_dict(row) if row else None
+
+    def add_belief(
+        self, subject: str, statement: str, field: str,
+        evidence_ids: Optional[list[int]] = None,
+        confidence: float = 0.5
+    ) -> int:
+        """手动声明一个 belief（Agent 或用户显式表达对用户的理解）。"""
+        now = self._now()
+        ev_ids = json.dumps(evidence_ids or [])
+        cursor = self.conn.execute(
+            "INSERT INTO beliefs (subject, statement, field, confidence, "
+            "evidence_ids, verification_status, source, created_at, updated_at) "
+            "VALUES (?, ?, ?, ?, ?, 'unverified', 'manual', ?, ?)",
+            (subject, statement, field, confidence, ev_ids, now, now)
+        )
+        return cursor.lastrowid
+
+    def confirm_belief(self, belief_id: int) -> None:
+        """用户确认一个 belief——置信度设为 1.0，状态设为 confirmed。"""
+        self.conn.execute(
+            "UPDATE beliefs SET verification_status = 'confirmed', "
+            "confidence = 1.0, updated_at = ? WHERE id = ?",
+            (self._now(), belief_id)
+        )
+
+    def contest_belief(self, belief_id: int, contradicting_memory_id: int) -> Optional[int]:
+        """用新证据挑战一个现有 belief。
+
+        自动创建新 belief（从 contradicting memory 合成），
+        旧 belief 标记为 stale。
+        返回新 belief ID，或 None（如果旧 belief 不存在）。
+        """
+        old_belief = self.get_belief(belief_id)
+        if not old_belief:
+            return None
+
+        new_mem = self.conn.execute(
+            "SELECT content, field FROM memories WHERE id = ?",
+            (contradicting_memory_id,)
+        ).fetchone()
+        if not new_mem:
+            return None
+
+        # 标记旧信念为 stale
+        now = self._now()
+        self.conn.execute(
+            "UPDATE beliefs SET verification_status = 'stale', "
+            "updated_at = ? WHERE id = ?",
+            (now, belief_id)
+        )
+
+        # 合并证据链
+        old_evidence = json.loads(old_belief["evidence_ids"])
+        old_contra = json.loads(old_belief.get("contradicted_by") or "[]")
+        new_evidence = list(set(old_evidence + [contradicting_memory_id]))
+        new_contra = list(set(old_contra + old_evidence))
+
+        confidence = self._compute_confidence(new_evidence, new_contra)
+        return self.add_belief(
+            subject=old_belief["subject"],
+            statement=new_mem["content"],
+            field=new_mem["field"] or old_belief["field"],
+            evidence_ids=new_evidence,
+            confidence=confidence
+        )
+
+    def update_belief_confidence(self, belief_id: int) -> float:
+        """根据当前证据图状态重新计算 confidence。返回新值。"""
+        row = self.conn.execute(
+            "SELECT evidence_ids, contradicted_by FROM beliefs WHERE id = ?",
+            (belief_id,)
+        ).fetchone()
+        if not row:
+            return 0.0
+
+        evidence_ids = json.loads(row["evidence_ids"])
+        contradicted_ids = json.loads(row["contradicted_by"] or "[]")
+        confidence = self._compute_confidence(evidence_ids, contradicted_ids)
+        self.conn.execute(
+            "UPDATE beliefs SET confidence = ?, updated_at = ? WHERE id = ?",
+            (confidence, self._now(), belief_id)
+        )
+        return confidence
+
+    def supersede_belief(self, old_id: int, new_id: int) -> None:
+        """标记旧信念被新信念取代。"""
+        now = self._now()
+        self.conn.execute(
+            "UPDATE beliefs SET verification_status = 'stale', "
+            "superseded_by = ?, updated_at = ? WHERE id = ?",
+            (new_id, now, old_id)
+        )
+
+    # ------------------------------------------------------------------
     # Reflections — 跨轨迹关系网
     # ------------------------------------------------------------------
 
     REFLECTION_WINDOW_SEC = 3600       # 1 小时内写入的记忆参与自动建边
     REFLECTION_OVERLAP_THRESHOLD = 1   # 关键词重叠 >= 此值触发 related
 
-    # 时间衰减半衰期（天）— 不同 field 的信息衰变速度
-    FIELD_DECAY_HALF_LIFE = {
-        "bugs_issues": 7,
-        "meeting_notes": 7,
-        "project_tech": 60,
-        "personal_info": 180,
-    }
-    FIELD_DECAY_DEFAULT = 365  # 未匹配 field 的默认半衰期
-    DECAY_FLOOR = 0.7   # 衰减底限：最旧记忆最多压到 70%，防止挤出召回窗口
-
-    ANCHOR_BONUS = 0.3   # anchor 软加权乘子 (1.0 + ANCHOR_BONUS = 1.3x)
+    # 记忆不随时间衰减——旧记忆是未点燃的信号，价值取决于图结构而非年龄
     FIELD_BONUS = 1.5     # 同 field 匹配乘子（bucket 软加权）
 
     # Tier 1 闭环：reflections 层信号回流召回排序
@@ -359,11 +502,12 @@ class DyadCore:
         """跨窗口扫描同 field 最近 N 条记忆，检测矛盾并自动建 contradicted 边。
 
         与 _build_reflections 不同：无时间窗口限制，仅检测 contradicted。
+        被锚定的记忆优先进入候选池——anchor 作为参考节点标记，不参与 ranking。
         """
         candidates = self.conn.execute(
             "SELECT id, content FROM memories "
             "WHERE field = ? AND id != ? AND archived = 0 "
-            "ORDER BY created_at DESC LIMIT ?",
+            "ORDER BY anchor DESC, created_at DESC LIMIT ?",
             (field, new_id, self.CONTRADICTED_SCAN_LIMIT)
         ).fetchall()
 
@@ -385,6 +529,131 @@ class DyadCore:
                     new_id, c["id"], "contradicted",
                     strength=self.CONTRADICTED_AUTO_STRENGTH
                 )
+                self._synthesize_belief_from_contradiction(
+                    new_id, c["id"], field
+                )
+
+    def _synthesize_belief_from_contradiction(
+        self, winning_id: int, losing_id: int, field: str
+    ) -> Optional[int]:
+        """当检测到矛盾时，从获胜记忆自动合成 belief。
+
+        winning_id: 新记忆（矛盾声明的发起者）
+        losing_id: 旧记忆（被矛盾指向的）
+        返回新 belief 的 ID，或 None（如果该 subject 已有 confirmed 信念）。
+        """
+        # 检查是否已有同一 subject 的 confirmed 信念
+        subject = self._extract_subject(winning_id)
+        existing = self.conn.execute(
+            "SELECT id, verification_status FROM beliefs "
+            "WHERE subject = ? AND field = ? AND superseded_by = 0 "
+            "ORDER BY created_at DESC LIMIT 1",
+            (subject, field)
+        ).fetchone()
+
+        if existing and existing["verification_status"] == "confirmed":
+            # 已确认的信念不会被自动覆盖——需要显式 contest
+            return None
+
+        # 计算初始置信度
+        evidence_ids = json.dumps([winning_id])
+        contradicted_by = json.dumps([losing_id])
+        confidence = self._compute_confidence([winning_id], [losing_id])
+
+        now = self._now()
+        if existing:
+            # 取代旧信念
+            self.conn.execute(
+                "UPDATE beliefs SET superseded_by = ?, updated_at = ? WHERE id = ?",
+                (0, now, existing["id"])  # 先占位，下面更新
+            )
+            # 实际写入后在下面更新 superseded_by
+            self.conn.execute(
+                "UPDATE beliefs SET verification_status = 'stale', "
+                "superseded_by = -1, updated_at = ? WHERE id = ?",
+                (now, existing["id"])
+            )
+
+        cursor = self.conn.execute(
+            "INSERT INTO beliefs (subject, statement, field, confidence, "
+            "evidence_ids, contradicted_by, verification_status, source, "
+            "created_at, updated_at) "
+            "SELECT ?, content, ?, ?, ?, ?, 'unverified', 'auto', ?, ? "
+            "FROM memories WHERE id = ?",
+            (subject, field, confidence, evidence_ids, contradicted_by, now, now, winning_id)
+        )
+        new_belief_id = cursor.lastrowid
+
+        if existing:
+            self.conn.execute(
+                "UPDATE beliefs SET superseded_by = ? WHERE id = ?",
+                (new_belief_id, existing["id"])
+            )
+
+        return new_belief_id
+
+    def _extract_subject(self, memory_id: int) -> str:
+        """从记忆内容中提取 belief subject 键。
+
+        策略：取 field 作为前缀 + 前 3 个关键 token 的 hash。
+        足够区分同一 field 内的不同主题。
+        """
+        row = self.conn.execute(
+            "SELECT field, content FROM memories WHERE id = ?",
+            (memory_id,)
+        ).fetchone()
+        if not row:
+            return f"unknown_{memory_id}"
+
+        field = row["field"] or "general"
+        content = row["content"]
+
+        # 简单提取：取前 60 个字符作为 subject 摘要
+        snippet = content[:60].replace("\n", " ").strip()
+        return f"{field}:{snippet}"
+
+    def _compute_confidence(
+        self, evidence_ids: list[int], contradicted_ids: list[int]
+    ) -> float:
+        """纯结构置信度计算——从图拓扑中涌现，无外部权威。
+
+        四个因子：
+          1. 证据数量（base）
+          2. Echoed 边加成（跨源确认信号）
+          3. 源多样性加成（user + agent 双源 > 单源）
+          4. Contradicted 惩罚
+        """
+        n_evidence = max(len(evidence_ids), 1)
+        base = min(1.0, 0.5 + n_evidence * 0.1)  # 1→0.6, 2→0.7, 3→0.8...
+
+        # Echoed bonus
+        if evidence_ids:
+            ph = ','.join('?' for _ in evidence_ids)
+            echoed_count = self.conn.execute(
+                f"SELECT COUNT(DISTINCT id) FROM reflections "
+                f"WHERE relation_type = 'echoed' "
+                f"AND (source_id IN ({ph}) OR target_id IN ({ph}))",
+                evidence_ids + evidence_ids
+            ).fetchone()[0]
+            echo_bonus = min(0.2, echoed_count * 0.05)
+        else:
+            echo_bonus = 0.0
+
+        # Source diversity
+        if evidence_ids:
+            ph = ','.join('?' for _ in evidence_ids)
+            sources = self.conn.execute(
+                f"SELECT COUNT(DISTINCT source) FROM memories WHERE id IN ({ph})",
+                evidence_ids
+            ).fetchone()[0]
+            diversity_bonus = 0.1 if sources >= 2 else 0.0
+        else:
+            diversity_bonus = 0.0
+
+        # Contradicted penalty
+        contra_penalty = len(contradicted_ids) * 0.15
+
+        return round(max(0.1, min(1.0, base + echo_bonus + diversity_bonus - contra_penalty)), 4)
 
     def _detect_contradiction(self, new_content: str, old_content: str) -> bool:
         """检测新记忆是否构成对旧记忆的修正/否定。
@@ -568,6 +837,7 @@ class DyadCore:
         limit: int = 5,
         include_archived: bool = False,
         expand_graph: bool = True,
+        include_beliefs: bool = True,
     ) -> list[dict]:
         """召回记忆。纯 FTS5 + LIKE + 关系图扩展，零外部依赖。
 
@@ -575,6 +845,7 @@ class DyadCore:
           主引擎 — FTS5 trigram（零成本，始终可用）
           回退引擎 — LIKE 搜索（trigram 无法覆盖的 <3 字符短词）
           图扩展 — 沿 reflections 边发现语义邻居（1-hop）
+          Belief 注入 — 当前 field 的高置信度信念插入结果顶部
 
         Args:
             query: 可选搜索词。
@@ -582,14 +853,16 @@ class DyadCore:
             limit: 返回最大条数。
             include_archived: 是否包含已归档记忆。
             expand_graph: 是否启用关系图扩展。
+            include_beliefs: 是否在结果中注入匹配的 beliefs。
 
         Returns:
             记忆 dict 列表，按相关性从高到低排列。
             每条 dict 含 memories 表全部字段，外加：
               - rank (float, 可选): FTS5 BM25 分数（越小越好）
               - snippet (str, 可选): 命中片段
-              - depth (int): 0=直接命中, 1=图扩展命中
+              - depth (int): 0=直接命中, 1=图扩展命中, 2=belief
               - via_type (str, 可选): 关系类型
+              - is_belief (bool, 可选): True 表示这是信念而非记忆
         """
         if query:
             has_short = self._has_short_terms(query)
@@ -608,9 +881,25 @@ class DyadCore:
                 graph_results = self._recall_graph(results, limit - len(results), include_archived)
                 results = self._merge_results(results, graph_results, limit)
 
+            # Belief 注入：高置信度信念优先于原始记忆
+            if include_beliefs and field_hint:
+                belief_results = self._recall_beliefs(field_hint, max(1, limit // 3))
+                if belief_results:
+                    results = belief_results + results
+                    if len(results) > limit:
+                        results = results[:limit]
+
             return results
         else:
-            return self._recall_no_query(field_hint, limit, include_archived)
+            results = self._recall_no_query(field_hint, limit, include_archived)
+            # 无查询时也注入 beliefs
+            if include_beliefs and field_hint:
+                belief_results = self._recall_beliefs(field_hint, max(1, limit // 3))
+                if belief_results:
+                    results = belief_results + results
+                    if len(results) > limit:
+                        results = results[:limit]
+            return results
 
     def _recall_fts(
         self, query: str, field_hint: Optional[str],
@@ -622,7 +911,6 @@ class DyadCore:
             return self._recall_no_query(field_hint, limit, include_archived)
 
         archived_filter = "" if include_archived else "AND m.archived = 0"
-        decay_case = self._decay_case()
 
         if field_hint is not None:
             sql = f"""
@@ -643,8 +931,6 @@ class DyadCore:
                 WHERE 1=1 {archived_filter}
                 ORDER BY
                     (-COALESCE(f.rank, 1.0))
-                    * (1.0 + m.anchor * {self.ANCHOR_BONUS})
-                    * MAX({self.DECAY_FLOOR}, POWER(0.5, (STRFTIME('%s', 'now') - m.created_at) / 86400.0 / ({decay_case})))
                     * CASE WHEN m.field = ?2 THEN {self.FIELD_BONUS} ELSE 1.0 END
                     {self._reflection_order_factors()} DESC
                 LIMIT ?3
@@ -669,8 +955,6 @@ class DyadCore:
                 WHERE 1=1 {archived_filter}
                 ORDER BY
                     (-COALESCE(f.rank, 1.0))
-                    * (1.0 + m.anchor * {self.ANCHOR_BONUS})
-                    * MAX({self.DECAY_FLOOR}, POWER(0.5, (STRFTIME('%s', 'now') - m.created_at) / 86400.0 / ({decay_case})))
                     {self._reflection_order_factors()} DESC
                 LIMIT ?2
             """
@@ -700,7 +984,6 @@ class DyadCore:
 
         archived_filter = "" if include_archived else "AND archived = 0"
         like_clause = ' OR '.join(['content LIKE ?' for _ in short_terms])
-        decay_case = self._decay_case()
 
         if field_hint is not None:
             sql = f"""
@@ -709,9 +992,7 @@ class DyadCore:
                 WHERE ({like_clause})
                     {archived_filter}
                 ORDER BY
-                    (1.0 + m.anchor * {self.ANCHOR_BONUS})
-                    * MAX({self.DECAY_FLOOR}, POWER(0.5, (STRFTIME('%s', 'now') - m.created_at) / 86400.0 / ({decay_case})))
-                    * CASE WHEN m.field = ? THEN {self.FIELD_BONUS} ELSE 1.0 END
+                    CASE WHEN m.field = ? THEN {self.FIELD_BONUS} ELSE 1.0 END
                     {self._reflection_order_factors()} DESC
                 LIMIT ?
             """
@@ -726,8 +1007,7 @@ class DyadCore:
                 WHERE ({like_clause})
                     {archived_filter}
                 ORDER BY
-                    (1.0 + m.anchor * {self.ANCHOR_BONUS})
-                    * MAX({self.DECAY_FLOOR}, POWER(0.5, (STRFTIME('%s', 'now') - m.created_at) / 86400.0 / ({decay_case})))
+                    1.0
                     {self._reflection_order_factors()} DESC
                 LIMIT ?
             """
@@ -747,7 +1027,6 @@ class DyadCore:
         seed_ids = [s['id'] for s in seeds]
         ph = ','.join('?' for _ in seed_ids)
         archived_filter = "" if include_archived else "AND m.archived = 0"
-        decay_case = self._decay_case()
 
         # 1-hop 扩展：找出与种子通过 reflections 关联的记忆
         # source_id → target_id 方向：种子是 source，邻居是 target
@@ -767,8 +1046,6 @@ class DyadCore:
               {archived_filter}
             ORDER BY
                 r.strength
-                * (1.0 + m.anchor * {self.ANCHOR_BONUS})
-                * MAX({self.DECAY_FLOOR}, POWER(0.5, (STRFTIME('%s', 'now') - m.created_at) / 86400.0 / ({decay_case})))
                 {self._reflection_order_factors()} DESC
             LIMIT ?
         """
@@ -777,12 +1054,34 @@ class DyadCore:
         rows = self.conn.execute(sql, params).fetchall()
         return self._rows_to_dicts(rows)
 
+    def _recall_beliefs(self, field: str, limit: int) -> list[dict]:
+        """检索匹配 field 的高置信度 beliefs。
+
+        返回格式与 memories 兼容的 dict 列表，
+        添加 is_belief=True, depth=2 标记供下游区分。
+        """
+        rows = self.conn.execute(
+            "SELECT * FROM beliefs "
+            "WHERE field = ? AND superseded_by = 0 AND confidence >= 0.5 "
+            "ORDER BY confidence DESC LIMIT ?",
+            (field, limit)
+        ).fetchall()
+
+        results = []
+        for r in rows:
+            d = self._row_to_dict(r)
+            d["is_belief"] = True
+            d["depth"] = 2
+            d["source"] = "belief"
+            d["content"] = d["statement"]
+            results.append(d)
+        return results
+
     def _recall_no_query(
         self, field_hint: Optional[str], limit: int, include_archived: bool
     ) -> list[dict]:
-        """无查询词时的召回：同场优先 × 时间衰减 × 锚定加成。"""
+        """无查询词时的召回：同场优先 × 图拓扑排序。"""
         archived_filter = "" if include_archived else "AND archived = 0"
-        decay_case = self._decay_case()
 
         if field_hint is not None:
             sql = f"""
@@ -790,9 +1089,7 @@ class DyadCore:
                 FROM memories m
                 WHERE 1=1 {archived_filter}
                 ORDER BY
-                    (1.0 + m.anchor * {self.ANCHOR_BONUS})
-                    * MAX({self.DECAY_FLOOR}, POWER(0.5, (STRFTIME('%s', 'now') - m.created_at) / 86400.0 / ({decay_case})))
-                    * CASE WHEN m.field = ?1 THEN {self.FIELD_BONUS} ELSE 1.0 END
+                    CASE WHEN m.field = ?1 THEN {self.FIELD_BONUS} ELSE 1.0 END
                     {self._reflection_order_factors()} DESC
                 LIMIT ?2
             """
@@ -803,8 +1100,7 @@ class DyadCore:
                 FROM memories m
                 WHERE 1=1 {archived_filter}
                 ORDER BY
-                    (1.0 + m.anchor * {self.ANCHOR_BONUS})
-                    * MAX({self.DECAY_FLOOR}, POWER(0.5, (STRFTIME('%s', 'now') - m.created_at) / 86400.0 / ({decay_case})))
+                    1.0
                     {self._reflection_order_factors()} DESC
                 LIMIT ?1
             """
@@ -832,25 +1128,14 @@ class DyadCore:
     # Tokenize / Query building
     # ------------------------------------------------------------------
 
-    def _decay_case(self) -> str:
-        """生成 SQL CASE 表达式：按 field 返回半衰期天数。
-
-        当 decay_enabled=False 时返回极大值，使衰减因子 ≈1.0（用于消融实验）。
-        """
-        if not self.decay_enabled:
-            return "999999.0"
-        cases = []
-        for field_name, half_life in self.FIELD_DECAY_HALF_LIFE.items():
-            cases.append(f"WHEN m.field = '{field_name}' THEN {half_life}.0\n")
-        return f"CASE {' '.join(cases)}ELSE {self.FIELD_DECAY_DEFAULT}.0 END"
-
     def _reflection_order_factors(self) -> str:
-        """ORDER BY 片段：reflections 层信号 + field 动态回流到排序。
+        """ORDER BY 片段：纯图拓扑信号回流到排序（无时间衰减，无锚定加成）。
 
-        Tier 1 闭环 — 三个因子（contradicted/echoed 可独立消融）：
-          - contradicted 惩罚：被指向的旧记忆 ×0.6（需 contradicted_enabled）
+        Tier 1 闭环 — 四个因子：
+          - contradicted 惩罚：被指向的记忆 ×0.8（需 contradicted_enabled）
           - echoed 加成：有确认回声的记忆 ×1.1（需 echoed_enabled）
           - field 强度：场域记忆密度 → 对数缩放 ×1.0~1.15（始终生效）
+          - belief 加成：作为高置信信念证据的记忆 ×1.0~1.15（Anchor 的结构替代）
         """
         parts = []
         if self.contradicted_enabled:
@@ -868,6 +1153,13 @@ class DyadCore:
                                1.0 + LN(COUNT(*) + 1) * {self.FIELD_STRENGTH_SCALE})
                     FROM memories
                     WHERE field = m.field AND archived = 0), 1.0)""")
+        # Belief 证据加成：结构替代 anchor——记忆的价值取决于它是否支撑当前 truth
+        parts.append(f"""        * COALESCE((SELECT 1.0 + MAX(b.confidence - 0.5, 0.0) * 0.3
+                    FROM beliefs b
+                    WHERE b.field = m.field
+                      AND b.superseded_by = 0
+                      AND b.evidence_ids LIKE ('%' || m.id || '%')
+                    LIMIT 1), 1.0)""")
         return "\n".join(parts) + "\n"
 
     @staticmethod
