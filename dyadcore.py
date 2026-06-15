@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-dyadcore v0.1.0 — 本地 Peer 记忆系统
+dyadcore v0.2.0 — 本地 Peer 记忆系统
 
 用户与 Agent 是磁场的两极，共同在关系场（Field）中留下痕迹。
 记忆不是数据，而是"发生在场中的痕迹"。

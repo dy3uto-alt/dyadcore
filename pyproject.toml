@@ -4,7 +4,7 @@ build-backend = "setuptools.backends._legacy:_Backend"
 
 [project]
 name = "dyadcore"
-version = "0.1.0"
+version = "0.2.0"
 description = "Local peer memory system for AI agents — zero-dependency, SQLite-native, FTS5 trigram retrieval with Dual Mirror architecture."
 readme = "README.md"
 license = {text = "Apache-2.0"}
