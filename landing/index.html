@@ -14,117 +14,140 @@
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
   }
-  .container { max-width: 720px; margin: 0 auto; padding: 0 24px; }
+  .container { width: 100%; padding: 0 48px; }
 
   /* Hero */
-  .hero { padding: 120px 0 80px; }
-  .hero h1 { font-size: 3.5rem; font-weight: 800; letter-spacing: -0.04em; color: #fff; margin-bottom: 20px; }
-  .hero .sub { font-size: 1.1rem; color: #666; max-width: 480px; line-height: 1.7; margin-bottom: 36px; }
-  .hero .links { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; }
-  .hero .links a { color: #888; font-size: 0.9rem; text-decoration: none; transition: color 0.15s; }
+  .hero { padding: 100px 0 60px; display: flex; align-items: flex-end; justify-content: space-between; gap: 40px; flex-wrap: wrap; }
+  .hero h1 { font-size: 3.5rem; font-weight: 800; letter-spacing: -0.04em; color: #fff; }
+  .hero .sub { font-size: 1.05rem; color: #666; max-width: 600px; line-height: 1.7; }
+  .hero .sub .en { display: block; margin-top: 12px; font-size: 0.85rem; color: #333; }
+  .hero .links { flex-shrink: 0; }
+  .hero .links a { color: #555; font-size: 0.9rem; text-decoration: none; transition: color 0.15s; }
   .hero .links a:hover { color: #fff; }
 
-  /* Section */
-  section { padding: 60px 0; }
-  section h2 { font-size: 1.3rem; font-weight: 700; color: #fff; margin-bottom: 20px; letter-spacing: -0.02em; }
-  section p { color: #666; margin-bottom: 12px; font-size: 0.95rem; max-width: 560px; }
-  section p strong { color: #999; font-weight: 600; }
-
   /* Divider */
-  .divider { border: 0; height: 1px; background: #111; margin: 0; }
+  hr { border: 0; height: 1px; background: #111; margin: 0 48px; }
+
+  /* Section */
+  section { padding: 48px 0; }
+
+  /* Two-column layout */
+  .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
+  .cols > div { padding: 48px 48px; border-right: 1px solid #111; }
+  .cols > div:last-child { border-right: 0; }
+  .cols h2 { font-size: 1.2rem; font-weight: 700; color: #fff; margin-bottom: 18px; letter-spacing: -0.02em; }
 
   /* Mirror */
-  .mirrors { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: #111; border-radius: 6px; overflow: hidden; }
-  .mirrors > div { background: #000; padding: 28px 24px; }
-  .mirrors h3 { font-size: 0.95rem; font-weight: 700; color: #fff; margin-bottom: 4px; letter-spacing: -0.01em; }
-  .mirrors .src { font-size: 0.75rem; color: #444; margin-bottom: 10px; font-family: "JetBrains Mono", monospace; }
-  .mirrors p { font-size: 0.88rem; color: #666; margin: 0; }
+  .mirrors { display: grid; grid-template-columns: 1fr 1fr; }
+  .mirrors > div { padding: 24px 48px; border-bottom: 1px solid #111; }
+  .mirrors > div:first-child { border-right: 1px solid #111; }
+  .mirrors h3 { font-size: 0.95rem; font-weight: 700; color: #fff; margin-bottom: 4px; }
+  .mirrors .src { font-size: 0.75rem; color: #333; margin-bottom: 10px; font-family: "JetBrains Mono", monospace; }
+  .mirrors p { font-size: 0.88rem; color: #666; margin: 0; max-width: 360px; }
 
   /* Relation tags */
-  .rel-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 16px; }
-  .rel-tag { padding: 4px 12px; border-radius: 4px; font-size: 0.78rem; font-family: "JetBrains Mono", monospace; background: #0a0a0a; border: 1px solid #1a1a1a; color: #555; }
+  .rel-tags { display: flex; gap: 8px; flex-wrap: wrap; padding: 0 48px; margin-bottom: 14px; }
+  .rel-tag { padding: 4px 12px; border-radius: 4px; font-size: 0.78rem; font-family: "JetBrains Mono", monospace; color: #555; }
+  .rel-note { padding: 0 48px; color: #555; font-size: 0.88rem; max-width: 560px; }
 
   /* Code */
   .code-block {
     background: #050505;
     border: 1px solid #111;
     border-radius: 6px;
-    padding: 24px;
+    padding: 28px 32px;
     overflow-x: auto;
     font-size: 0.85rem;
-    line-height: 1.65;
+    line-height: 1.7;
   }
   .code-block code { font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace; font-size: 0.85rem; }
   .c1 { color: #444; }
-  .c2 { color: #777; }
+  .c2 { color: #888; }
   .c3 { color: #555; }
 
   /* API table */
-  table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
-  th { text-align: left; color: #555; font-weight: 500; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.06em; padding: 10px 0; border-bottom: 1px solid #111; }
-  td { padding: 10px 0; border-bottom: 1px solid #0a0a0a; color: #888; }
-  td:first-child { font-family: "JetBrains Mono", monospace; font-size: 0.82rem; color: #ccc; }
-  td:nth-child(2) { color: #666; }
+  .api-grid { display: grid; grid-template-columns: 1fr 1fr; }
+  .api-grid > div { padding: 24px 48px; border-bottom: 1px solid #0a0a0a; border-right: 1px solid #0a0a0a; }
+  .api-grid > div:nth-child(even) { border-right: 0; }
+  .api-grid .method { font-family: "JetBrains Mono", monospace; font-size: 0.85rem; color: #ccc; margin-bottom: 4px; }
+  .api-grid .desc { font-size: 0.82rem; color: #555; }
+
+  /* Constraints */
+  .constraints { display: grid; grid-template-columns: 1fr 1fr; }
+  .constraints > div { padding: 32px 48px; border-right: 1px solid #111; border-bottom: 1px solid #111; }
+  .constraints > div:nth-child(even) { border-right: 0; }
+  .constraints h3 { font-size: 0.95rem; color: #fff; margin-bottom: 6px; }
+  .constraints p { font-size: 0.85rem; color: #555; }
 
   /* Footer */
-  footer { padding: 60px 0; color: #333; font-size: 0.82rem; }
-  footer a { color: #555; text-decoration: none; }
-  footer a:hover { color: #fff; }
+  footer { padding: 28px 48px; color: #222; font-size: 0.8rem; display: flex; justify-content: space-between; }
+  footer a { color: #333; text-decoration: none; }
+  footer a:hover { color: #555; }
 
-  @media (max-width: 640px) {
-    .hero { padding: 80px 0 50px; }
+  /* Full-width sections get container padding */
+  section.full { padding: 48px 48px; }
+  section.full h2 { font-size: 1.2rem; font-weight: 700; color: #fff; margin-bottom: 18px; }
+
+  @media (max-width: 768px) {
+    .container, section.full, .constraints > div, .api-grid > div, .mirrors > div { padding-left: 24px; padding-right: 24px; }
+    hr { margin: 0 24px; }
+    .hero { padding: 60px 0 40px; flex-direction: column; align-items: flex-start; gap: 24px; }
     .hero h1 { font-size: 2.2rem; }
+    .cols { grid-template-columns: 1fr; }
+    .cols > div { border-right: 0; border-bottom: 1px solid #111; padding: 32px 24px; }
     .mirrors { grid-template-columns: 1fr; }
-    table { font-size: 0.78rem; }
-    td:first-child { font-size: 0.75rem; }
+    .mirrors > div:first-child { border-right: 0; }
+    .api-grid { grid-template-columns: 1fr; }
+    .api-grid > div { border-right: 0; }
+    .constraints { grid-template-columns: 1fr; }
+    .constraints > div:nth-child(even) { border-right: 0; }
   }
 </style>
 </head>
 <body>
 
-<header class="hero">
-  <div class="container">
+<header class="hero container">
+  <div>
     <h1>dyadcore</h1>
-    <p class="sub">
-      AI Agent 本地 Peer 记忆系统。零依赖，SQLite 原生。<br>
-      用户与 Agent 是磁场的两极，记忆是发生在场中的痕迹。
-      <span style="display:block;margin-top:14px;font-size:0.85rem;color:#444">Local peer memory for AI agents. Zero dependencies. SQLite-native. User and agent are two poles of a magnetic field — memory is the trace left in the field.</span>
-    </p>
-    <div class="links">
-      <a href="https://github.com/dy3uto-alt/dyadcore" class="primary">GitHub →</a>
-    </div>
+  </div>
+  <p class="sub">
+    AI Agent 本地 Peer 记忆系统。零依赖，SQLite 原生。<br>
+    用户与 Agent 是磁场的两极，记忆是发生在场中的痕迹。
+    <span class="en">Local peer memory for AI agents. Zero dependencies. SQLite-native. User and agent are two poles of a magnetic field — memory is the trace left in the field.</span>
+  </p>
+  <div class="links">
+    <a href="https://github.com/dy3uto-alt/dyadcore">GitHub →</a>
   </div>
 </header>
 
-<hr class="divider">
+<hr>
 
-<section>
-  <div class="container">
-    <h2>Architecture</h2>
-    <div class="mirrors">
-      <div>
-        <h3>User Mirror</h3>
-        <div class="src">source = "user"</div>
-        <p>Records user behavior and expressions — every interaction is a trace.</p>
-      </div>
-      <div>
-        <h3>Agent Mirror</h3>
-        <div class="src">source = "agent"</div>
-        <p>Records agent observations and reasoning — symmetric peer, no special category.</p>
-      </div>
+<section style="padding-bottom:0">
+  <div class="mirrors">
+    <div>
+      <h3>User Mirror</h3>
+      <div class="src">source = "user"</div>
+      <p>Records user behavior and expressions — every interaction is a trace.</p>
     </div>
-    <div class="rel-tags">
-      <span class="rel-tag">triggered</span>
-      <span class="rel-tag">echoed</span>
-      <span class="rel-tag">contradicted</span>
-      <span class="rel-tag">related</span>
+    <div>
+      <h3>Agent Mirror</h3>
+      <div class="src">source = "agent"</div>
+      <p>Records agent observations and reasoning — symmetric peer, no special category.</p>
     </div>
-    <p style="margin-top:14px">Cross-trace relation edges form a dynamic semantic graph. Retrieval expands along these edges (1-hop) to discover neighbors that are relevant but not directly matched.</p>
   </div>
+  <div class="rel-tags">
+    <span class="rel-tag">triggered</span>
+    <span class="rel-tag">echoed</span>
+    <span class="rel-tag">contradicted</span>
+    <span class="rel-tag">related</span>
+  </div>
+  <p class="rel-note">Cross-trace relation edges form a dynamic semantic graph. Retrieval expands along these edges (1-hop) to discover neighbors that are relevant but not directly matched.</p>
 </section>
 
-<section id="quickstart">
-  <div class="container">
+<hr>
+
+<div class="cols">
+  <div>
     <h2>Quick Start</h2>
     <div class="code-block"><code>
 <span class="c1">pip install dyadcore</span>
@@ -143,47 +166,49 @@ results = dc.recall(<span class="c3">"本地记忆方案"</span>, field_hint=<sp
 dc.close()
     </code></div>
   </div>
-</section>
-
-<section id="api">
-  <div class="container">
+  <div>
     <h2>Core API</h2>
-    <table>
-      <thead><tr><th>Method</th><th></th></tr></thead>
-      <tbody>
-        <tr><td>write(content, *, source, field)</td><td>Write a trace, returns memory_id</td></tr>
-        <tr><td>write_batch(items)</td><td>Bulk write in single transaction (5–10x faster)</td></tr>
-        <tr><td>recall(query, *, field_hint, limit)</td><td>Semantic recall with FTS5 + LIKE + graph expansion</td></tr>
-        <tr><td>anchor(mid) / unanchor(mid)</td><td>Mark / unmark a reference node</td></tr>
-        <tr><td>archive(mid) / unarchive(mid)</td><td>Archive / restore a memory</td></tr>
-        <tr><td>add_relation(src, tgt, type, strength)</td><td>Add a relation edge between traces</td></tr>
-        <tr><td>get_relation_graph(mid, depth)</td><td>Subgraph via recursive CTE</td></tr>
-        <tr><td>get_contradicted_map(ids)</td><td>Old→new mapping for evolution chains</td></tr>
-        <tr><td>add_belief(subject, statement, field)</td><td>Declare a belief (manual or auto-synthesized)</td></tr>
-        <tr><td>confirm_belief(bid) / contest_belief(bid)</td><td>Confirm or challenge a belief with new evidence</td></tr>
-        <tr><td>stats() / field_snapshot(field)</td><td>Database stats and field-level diagnostics</td></tr>
-        <tr><td>check_silence(days)</td><td>Find dormant memories</td></tr>
-      </tbody>
-    </table>
+    <div class="api-grid">
+      <div><div class="method">write(content, *, source, field)</div><div class="desc">Write a trace, returns memory_id</div></div>
+      <div><div class="method">write_batch(items)</div><div class="desc">Bulk write, single transaction</div></div>
+      <div><div class="method">recall(query, *, field_hint)</div><div class="desc">FTS5 + LIKE + graph expansion</div></div>
+      <div><div class="method">anchor(mid) / unanchor(mid)</div><div class="desc">Mark / unmark reference node</div></div>
+      <div><div class="method">archive(mid) / unarchive(mid)</div><div class="desc">Archive / restore a memory</div></div>
+      <div><div class="method">add_relation(src, tgt, type)</div><div class="desc">Add a relation edge</div></div>
+      <div><div class="method">get_relation_graph(mid, depth)</div><div class="desc">Subgraph via recursive CTE</div></div>
+      <div><div class="method">get_contradicted_map(ids)</div><div class="desc">Evolution chain mapping</div></div>
+      <div><div class="method">add_belief(subject, ...)</div><div class="desc">Declare a belief</div></div>
+      <div><div class="method">confirm_belief(bid)</div><div class="desc">Confirm / challenge a belief</div></div>
+      <div><div class="method">stats()</div><div class="desc">Database statistics</div></div>
+      <div><div class="method">field_snapshot(field)</div><div class="desc">Field-level diagnostics</div></div>
+    </div>
   </div>
-</section>
+</div>
 
-<section>
-  <div class="container">
-    <h2>Constraints</h2>
-    <p><strong>Single-file SQLite</strong> — no backend service, no config files.</p>
-    <p><strong>Zero external dependencies</strong> — no sqlite-vec, no embedding model, no C extensions.</p>
-    <p><strong>FTS5 trigram</strong> is the only retrieval engine, built into SQLite.</p>
-    <p><strong>Python ≥ 3.10</strong>. Apache 2.0.</p>
+<hr>
+
+<div class="constraints">
+  <div>
+    <h3>Single-file SQLite</h3>
+    <p>No backend service, no config files.</p>
   </div>
-</section>
-
-<hr class="divider">
+  <div>
+    <h3>Zero external dependencies</h3>
+    <p>No sqlite-vec, no embedding model, no C extensions.</p>
+  </div>
+  <div>
+    <h3>FTS5 trigram</h3>
+    <p>Built into SQLite. The only retrieval engine.</p>
+  </div>
+  <div>
+    <h3>Python ≥ 3.10</h3>
+    <p>Apache 2.0 license.</p>
+  </div>
+</div>
 
 <footer>
-  <div class="container">
-    dyadcore v0.2.0 · <a href="https://github.com/dy3uto-alt/dyadcore">GitHub</a> · Apache 2.0
-  </div>
+  <span>dyadcore v0.2.0</span>
+  <span><a href="https://github.com/dy3uto-alt/dyadcore">GitHub</a> · Apache 2.0</span>
 </footer>
 
 </body>
