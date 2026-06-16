@@ -115,6 +115,7 @@
   section h2 { font-size: 1rem; font-weight: 700; color: var(--section-h2); margin-bottom: 16px; letter-spacing: -0.01em; }
 
   /* Mirrors */
+  .section-label { padding: 20px 48px 12px; font-size: 0.72rem; color: var(--muted3); text-transform: uppercase; letter-spacing: 0.08em; }
   .mirrors { display: grid; grid-template-columns: 1fr 1fr; }
   .mirrors > div { padding: 32px 48px 24px; }
   .mirrors > div:first-child { border-right: 1px solid var(--border); }
@@ -169,6 +170,7 @@
   @media (max-width: 768px) {
     .hero { padding: 48px 24px 32px; }
     .hero h1 { font-size: 2rem; }
+    .section-label { padding: 14px 24px 8px; }
     .mirrors { grid-template-columns: 1fr; }
     .mirrors > div { padding: 24px 24px 16px; }
     .mirrors > div:first-child { border-right: 0; border-bottom: 1px solid var(--border); }
@@ -227,6 +229,7 @@
 <hr>
 
 <section>
+  <div class="section-label">Architecture</div>
   <div class="mirrors">
     <div>
       <h3>User Mirror</h3>
