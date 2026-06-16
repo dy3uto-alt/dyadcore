@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>dyadcore — 本地 Peer 记忆系统</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #0d0d0f;
+    --surface: #16161a;
+    --border: #2a2a32;
+    --text: #e4e4e8;
+    --text-muted: #90909a;
+    --accent: #c4b5fd;
+    --accent2: #67e8f9;
+    --code-bg: #1e1e28;
+    --radius: 8px;
+    color-scheme: dark;
+  }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+  }
+  .container { max-width: 860px; margin: 0 auto; padding: 0 24px; }
+  section { padding: 60px 0; }
+  h1 { font-size: 3rem; font-weight: 700; letter-spacing: -0.03em; }
+  h2 { font-size: 1.8rem; font-weight: 600; margin-bottom: 24px; }
+  h3 { font-size: 1.15rem; font-weight: 600; margin-bottom: 8px; }
+  p { color: var(--text-muted); margin-bottom: 16px; }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  /* Hero */
+  .hero {
+    padding: 100px 0 60px;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+  }
+  .hero h1 {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 16px;
+  }
+  .hero .tagline { font-size: 1.25rem; color: var(--text-muted); max-width: 520px; margin: 0 auto 32px; }
+  .badge-group { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-bottom: 32px; }
+  .badge {
+    display: inline-block;
+    padding: 4px 14px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+  }
+  .btn {
+    display: inline-block;
+    padding: 10px 28px;
+    border-radius: var(--radius);
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: all 0.15s;
+  }
+  .btn-primary { background: #a78bfa; color: #0d0d0f; }
+  .btn-primary:hover { background: #c4b5fd; text-decoration: none; }
+  .btn-outline { border: 1px solid var(--border); color: var(--text); margin-left: 10px; }
+  .btn-outline:hover { border-color: var(--accent); color: var(--accent); text-decoration: none; }
+
+  /* Dual Mirror cards */
+  .dual-mirror {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 20px;
+  }
+  .mirror-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px 24px;
+  }
+  .mirror-card .icon { font-size: 1.5rem; margin-bottom: 12px; }
+  .mirror-card h3 { margin-bottom: 6px; }
+  .mirror-card .label { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 12px; }
+
+  /* Relational grid (3 cols) */
+  .rel-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-top: 20px;
+    padding: 24px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+  }
+  .rel-grid h3 { margin-bottom: 12px; }
+  .rel-types { display: flex; gap: 8px; flex-wrap: wrap; }
+  .rel-tag {
+    padding: 3px 12px;
+    border-radius: 14px;
+    font-size: 0.8rem;
+    font-weight: 500;
+  }
+  .tag-triggered { background: rgba(196, 181, 253, 0.15); color: #c4b5fd; }
+  .tag-echoed { background: rgba(103, 232, 249, 0.15); color: #67e8f9; }
+  .tag-contradicted { background: rgba(253, 164, 175, 0.15); color: #fda4af; }
+  .tag-related { background: rgba(253, 224, 71, 0.15); color: #fde047; }
+
+  /* Code block */
+  pre {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px;
+    overflow-x: auto;
+    font-size: 0.9rem;
+    line-height: 1.55;
+  }
+  code { font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace; font-size: 0.88rem; }
+  .comment { color: #6b7280; }
+  .str { color: #a5d6ff; }
+  .fn { color: #c4b5fd; }
+  .kw { color: #67e8f9; }
+
+  /* Feature grid */
+  .features {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 16px;
+  }
+  .feature-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+  }
+  .feature-card .num {
+    font-size: 0.7rem;
+    color: var(--accent);
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+
+  /* Footer */
+  footer {
+    padding: 32px 0;
+    border-top: 1px solid var(--border);
+    text-align: center;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+  }
+
+  @media (max-width: 640px) {
+    h1 { font-size: 2rem; }
+    .dual-mirror, .features { grid-template-columns: 1fr; }
+    .hero { padding: 60px 0 40px; }
+    .btn-outline { margin-left: 0; margin-top: 10px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="container">
+    <h1>dyadcore</h1>
+    <p class="tagline">用户与 Agent 是磁场的两极，共同在关系场中留下痕迹。记忆不是数据——它是发生在场中的痕迹。</p>
+    <div class="badge-group">
+      <span class="badge">Zero Dependencies</span>
+      <span class="badge">SQLite FTS5</span>
+      <span class="badge">Python ≥ 3.10</span>
+      <span class="badge">Apache 2.0</span>
+    </div>
+    <div>
+      <a href="https://github.com/dy3uto-alt/dyadcore" class="btn btn-primary">GitHub</a>
+      <a href="#quickstart" class="btn btn-outline">Quick Start</a>
+    </div>
+  </div>
+</section>
+
+<!-- What -->
+<section>
+  <div class="container">
+    <h2>什么是 dyadcore？</h2>
+    <p>dyadcore 是一个为 AI Agent 设计的<strong>本地 Peer 记忆系统</strong>。它不依赖任何外部服务——纯 SQLite 驱动的语义检索，单文件即用。</p>
+    <p>对话中，用户和 Agent 如同磁场的两极，各自留下痕迹。这些痕迹之间形成关系网——<strong>triggered、echoed、contradicted、related</strong>——构成了一个动态演化的认知图。</p>
+  </div>
+</section>
+
+<!-- Architecture -->
+<section>
+  <div class="container">
+    <h2>Dual Mirror 架构</h2>
+    <div class="dual-mirror">
+      <div class="mirror-card">
+        <div class="icon">🪞</div>
+        <h3>User Mirror</h3>
+        <div class="label">source="user"</div>
+        <p>记录用户的行为、偏好、表达——每一次交互都是一条痕迹。</p>
+      </div>
+      <div class="mirror-card">
+        <div class="icon">🪞</div>
+        <h3>Agent Mirror</h3>
+        <div class="label">source="agent"</div>
+        <p>记录 Agent 的观察、推理、自我反思——对等实体，无特殊类别。</p>
+      </div>
+    </div>
+    <div class="rel-grid">
+      <div>
+        <h3>Relation Network</h3>
+        <p>跨轨迹的关系边构成了记忆之间的语义网络。每条边都是一个认知信号。</p>
+      </div>
+      <div class="rel-types">
+        <span class="rel-tag tag-triggered">triggered</span>
+        <span class="rel-tag tag-echoed">echoed</span>
+        <span class="rel-tag tag-contradicted">contradicted</span>
+        <span class="rel-tag tag-related">related</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Quick Start -->
+<section id="quickstart">
+  <div class="container">
+    <h2>Quick Start</h2>
+    <pre><code><span class="kw">from</span> dyadcore <span class="kw">import</span> DyadCore
+
+dc = DyadCore(<span class="str">"agent_memory.db"</span>)
+
+<span class="comment"># 写入痕迹</span>
+uid = dc.write(<span class="str">"用户偏好本地部署"</span>, source=<span class="str">"user"</span>, field=<span class="str">"技术选型"</span>)
+dc.anchor(uid)  <span class="comment"># 锚定重要记忆</span>
+
+<span class="comment"># 语义检索 + 图扩展</span>
+results = dc.recall(<span class="str">"本地记忆方案"</span>, field_hint=<span class="str">"技术选型"</span>)
+
+dc.close()</code></pre>
+  </div>
+</section>
+
+<!-- Features -->
+<section>
+  <div class="container">
+    <h2>核心特性</h2>
+    <div class="features">
+      <div class="feature-card">
+        <div class="num">01</div>
+        <h3>FTS5 Trigram 检索</h3>
+        <p>SQLite 内置全文索引，零成本，中文友好。短词 LIKE 回退兜底。</p>
+      </div>
+      <div class="feature-card">
+        <div class="num">02</div>
+        <h3>关系图扩展</h3>
+        <p>检索时自动沿 reflections 边做 1-hop 语义邻居发现，召回相关但不直接匹配的记忆。</p>
+      </div>
+      <div class="feature-card">
+        <div class="num">03</div>
+        <h3>Beliefs 认知层</h3>
+        <p>从关系图拓扑中涌现的信念系统——自动合成、可确认、可挑战、可取代。</p>
+      </div>
+      <div class="feature-card">
+        <div class="num">04</div>
+        <h3>零依赖</h3>
+        <p>无 sqlite-vec、无 embedding 模型、无 C 扩展、无后台服务。仅需 Python 标准库。</p>
+      </div>
+      <div class="feature-card">
+        <div class="num">05</div>
+        <h3>批量写入</h3>
+        <p>write_batch() 单事务批量导入，5-10x 提速。适用于历史对话回填。</p>
+      </div>
+      <div class="feature-card">
+        <div class="num">06</div>
+        <h3>Field Snapshot</h3>
+        <p>关系场动态分析——场强、极性、重心、关系密度。minimal 的可观测性。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <div class="container">
+    <p>dyadcore v0.2.0 · <a href="https://github.com/dy3uto-alt/dyadcore">GitHub</a> · Apache 2.0</p>
+  </div>
+</footer>
+
+</body>
+</html>
