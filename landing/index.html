@@ -1,55 +1,131 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-theme="dark">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>dyadcore — Local peer memory for AI agents</title>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  :root { color-scheme: dark; }
-  body {
-    font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
-    background: #000;
-    color: #ededed;
-    line-height: 1.6;
-    -webkit-font-smoothing: antialiased;
+
+  :root {
+    --bg: #000;
+    --text: #ededed;
+    --heading: #fff;
+    --muted: #555;
+    --muted2: #666;
+    --muted3: #444;
+    --muted4: #333;
+    --border: #111;
+    --border2: #0a0a0a;
+    --code-bg: #050505;
+    --code-bg2: #111;
+    --footer: #222;
+    --footer-link: #333;
+    --footer-link-hover: #555;
+    --hero-sub-en: #2a2a2a;
+    --hero-link: #666;
+    --hero-link-hover: #fff;
+    --rel-desc: #444;
+    --rel-tag: #444;
+    --section-h2: #fff;
+    --mirror-h3: #fff;
+    --mirror-src: #333;
+    --mirror-p: #555;
+    --api-method: #ccc;
+    --api-desc: #555;
+    --c1: #444;
+    --c2: #888;
+    --c3: #555;
+    color-scheme: dark;
   }
 
-  hr { border: 0; height: 1px; background: #111; margin: 0; }
+  :root[data-theme="light"] {
+    --bg: #fff;
+    --text: #333;
+    --heading: #000;
+    --muted: #888;
+    --muted2: #999;
+    --muted3: #aaa;
+    --muted4: #ccc;
+    --border: #e5e5e5;
+    --border2: #f0f0f0;
+    --code-bg: #f5f5f5;
+    --code-bg2: #e5e5e5;
+    --footer: #ccc;
+    --footer-link: #aaa;
+    --footer-link-hover: #666;
+    --hero-sub-en: #ccc;
+    --hero-link: #999;
+    --hero-link-hover: #000;
+    --rel-desc: #aaa;
+    --rel-tag: #aaa;
+    --section-h2: #000;
+    --mirror-h3: #000;
+    --mirror-src: #ccc;
+    --mirror-p: #888;
+    --api-method: #333;
+    --api-desc: #888;
+    --c1: #aaa;
+    --c2: #666;
+    --c3: #999;
+    color-scheme: light;
+  }
+
+  body {
+    font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    transition: background 0.2s, color 0.2s;
+  }
+
+  hr { border: 0; height: 1px; background: var(--border); margin: 0; transition: background 0.2s; }
+
+  /* Theme toggle */
+  .theme-btn {
+    position: fixed; top: 20px; right: 24px; z-index: 10;
+    width: 36px; height: 36px; border-radius: 6px;
+    border: 1px solid var(--border); background: var(--bg);
+    color: var(--muted3); cursor: pointer; font-size: 1rem;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.15s;
+  }
+  .theme-btn:hover { color: var(--heading); border-color: var(--muted3); }
 
   /* Hero */
   .hero { padding: 80px 48px 48px; }
-  .hero h1 { font-size: 3rem; font-weight: 800; letter-spacing: -0.04em; color: #fff; }
-  .hero .sub { font-size: 1rem; color: #555; max-width: 600px; line-height: 1.7; margin: 16px 0 28px; }
-  .hero .sub .en { display: block; margin-top: 10px; font-size: 0.85rem; color: #2a2a2a; }
-  .hero a { color: #666; font-size: 0.9rem; text-decoration: none; transition: color 0.15s; }
-  .hero a:hover { color: #fff; }
+  .hero h1 { font-size: 3rem; font-weight: 800; letter-spacing: -0.04em; color: var(--heading); }
+  .hero .sub { font-size: 1rem; color: var(--muted); max-width: 600px; line-height: 1.7; margin: 16px 0 28px; }
+  .hero .sub .en { display: block; margin-top: 10px; font-size: 0.85rem; color: var(--hero-sub-en); }
+  .hero a { color: var(--hero-link); font-size: 0.9rem; text-decoration: none; transition: color 0.15s; }
+  .hero a:hover { color: var(--hero-link-hover); }
 
   /* Section */
   section { padding: 0; }
-  section h2 { font-size: 1rem; font-weight: 700; color: #fff; margin-bottom: 16px; letter-spacing: -0.01em; }
+  section h2 { font-size: 1rem; font-weight: 700; color: var(--section-h2); margin-bottom: 16px; letter-spacing: -0.01em; }
 
   /* Mirrors */
   .mirrors { display: grid; grid-template-columns: 1fr 1fr; }
   .mirrors > div { padding: 32px 48px 24px; }
-  .mirrors > div:first-child { border-right: 1px solid #111; }
-  .mirrors h3 { font-size: 0.9rem; font-weight: 600; color: #fff; margin-bottom: 4px; }
-  .mirrors .src { font-size: 0.75rem; color: #333; font-family: "JetBrains Mono", monospace; margin-bottom: 8px; }
-  .mirrors p { font-size: 0.85rem; color: #555; max-width: 340px; }
+  .mirrors > div:first-child { border-right: 1px solid var(--border); }
+  .mirrors h3 { font-size: 0.9rem; font-weight: 600; color: var(--mirror-h3); margin-bottom: 4px; }
+  .mirrors .src { font-size: 0.75rem; color: var(--mirror-src); font-family: "JetBrains Mono", monospace; margin-bottom: 8px; }
+  .mirrors p { font-size: 0.85rem; color: var(--mirror-p); max-width: 340px; }
 
   .rel-row { display: flex; gap: 8px; flex-wrap: wrap; padding: 0 48px 10px; }
-  .rel-row span { font-family: "JetBrains Mono", monospace; font-size: 0.75rem; color: #444; }
-  .rel-desc { padding: 0 48px 32px; color: #444; font-size: 0.85rem; max-width: 600px; }
+  .rel-row span { font-family: "JetBrains Mono", monospace; font-size: 0.75rem; color: var(--rel-tag); }
+  .rel-desc { padding: 0 48px 32px; color: var(--rel-desc); font-size: 0.85rem; max-width: 600px; }
 
   /* Two-col */
   .two-col { display: grid; grid-template-columns: 1fr 1fr; }
   .two-col > div { padding: 40px 48px; }
-  .two-col > div:first-child { border-right: 1px solid #111; }
+  .two-col > div:first-child { border-right: 1px solid var(--border); }
 
   /* Code */
   .code-block {
-    background: #050505;
-    border: 1px solid #111;
+    background: var(--code-bg);
+    border: 1px solid var(--code-bg2);
     border-radius: 6px;
     padding: 24px;
     overflow-x: auto;
@@ -57,46 +133,53 @@
     line-height: 1.7;
   }
   .code-block code { font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace; }
-  .c1 { color: #444; }
-  .c2 { color: #888; }
-  .c3 { color: #555; }
+  .c1 { color: var(--c1); }
+  .c2 { color: var(--c2); }
+  .c3 { color: var(--c3); }
 
   /* API */
   .api-list { list-style: none; }
-  .api-list li { padding: 8px 0; border-bottom: 1px solid #0a0a0a; display: flex; justify-content: space-between; align-items: baseline; gap: 16px; }
-  .api-list .method { font-family: "JetBrains Mono", monospace; font-size: 0.82rem; color: #ccc; white-space: nowrap; }
-  .api-list .desc { font-size: 0.8rem; color: #555; text-align: right; }
+  .api-list li { padding: 8px 0; border-bottom: 1px solid var(--border2); display: flex; justify-content: space-between; align-items: baseline; gap: 16px; }
+  .api-list .method { font-family: "JetBrains Mono", monospace; font-size: 0.82rem; color: var(--api-method); white-space: nowrap; }
+  .api-list .desc { font-size: 0.8rem; color: var(--api-desc); text-align: right; }
 
   /* Constraints */
   .constraints { display: grid; grid-template-columns: 1fr 1fr; }
   .constraints > div { padding: 24px 48px; }
-  .constraints > div:first-child { border-right: 1px solid #111; }
-  .constraints > div:nth-child(2) { border-bottom: 1px solid #111; }
-  .constraints > div:first-child { border-bottom: 1px solid #111; }
-  .constraints h3 { font-size: 0.9rem; color: #fff; margin-bottom: 4px; }
-  .constraints p { font-size: 0.82rem; color: #555; }
+  .constraints > div:first-child { border-right: 1px solid var(--border); }
+  .constraints > div:nth-child(2) { border-bottom: 1px solid var(--border); }
+  .constraints > div:first-child { border-bottom: 1px solid var(--border); }
+  .constraints h3 { font-size: 0.9rem; color: var(--heading); margin-bottom: 4px; }
+  .constraints p { font-size: 0.82rem; color: var(--muted); }
 
   /* Footer */
-  footer { padding: 24px 48px; color: #222; font-size: 0.8rem; display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
-  footer a { color: #333; text-decoration: none; }
-  footer a:hover { color: #555; }
+  footer { padding: 24px 48px; color: var(--footer); font-size: 0.8rem; display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+  footer a { color: var(--footer-link); text-decoration: none; }
+  footer a:hover { color: var(--footer-link-hover); }
+  .counter-dark { display: inline; }
+  .counter-light { display: none; }
+  :root[data-theme="light"] .counter-dark { display: none; }
+  :root[data-theme="light"] .counter-light { display: inline; }
 
   @media (max-width: 768px) {
     .hero { padding: 48px 24px 32px; }
     .hero h1 { font-size: 2rem; }
     .mirrors { grid-template-columns: 1fr; }
     .mirrors > div { padding: 24px 24px 16px; }
-    .mirrors > div:first-child { border-right: 0; border-bottom: 1px solid #111; }
+    .mirrors > div:first-child { border-right: 0; border-bottom: 1px solid var(--border); }
     .rel-row, .rel-desc { padding-left: 24px; padding-right: 24px; }
     .two-col { grid-template-columns: 1fr; }
     .two-col > div { padding: 24px; }
-    .two-col > div:first-child { border-right: 0; border-bottom: 1px solid #111; }
+    .two-col > div:first-child { border-right: 0; border-bottom: 1px solid var(--border); }
     .constraints { grid-template-columns: 1fr; }
     .constraints > div { padding: 20px 24px; }
+    .theme-btn { top: 12px; right: 12px; }
   }
 </style>
 </head>
 <body>
+
+<button class="theme-btn" onclick="toggleTheme()" aria-label="Toggle theme" id="themeBtn">☀</button>
 
 <header class="hero">
   <h1>dyadcore</h1>
@@ -200,11 +283,37 @@ dc.close()
   <span>dyadcore v0.2.0</span>
   <span>
     <a href="mailto:dy3uto@gmail.com">dy3uto@gmail.com</a>
-    <span style="color:#1a1a1a;margin:0 8px">|</span>
-    <img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https://dyadcore.vercel.app&count_bg=%23000000&title_bg=%23000000&title=visits&icon_color=%23333333&edge_flat=true" alt="visits" style="height:18px;vertical-align:middle">
+    <span style="color:var(--muted4);margin:0 8px">|</span>
+    <img class="counter-dark" src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https://dyadcore.vercel.app&count_bg=%23000000&title_bg=%23000000&title=visits&icon_color=%23333333&edge_flat=true" alt="visits" style="height:18px;vertical-align:middle">
+    <img class="counter-light" src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https://dyadcore.vercel.app&count_bg=%23ffffff&title_bg=%23ffffff&title=visits&icon_color=%23cccccc&edge_flat=true" alt="visits" style="height:18px;vertical-align:middle;border:1px solid #e5e5e5;border-radius:4px">
   </span>
   <span><a href="https://github.com/dy3uto-alt/dyadcore">GitHub</a> · Apache 2.0</span>
 </footer>
+
+<script>
+  const html = document.documentElement;
+  const btn = document.getElementById('themeBtn');
+
+  function setTheme(theme) {
+    html.setAttribute('data-theme', theme);
+    btn.textContent = theme === 'dark' ? '☀' : '☾';
+    localStorage.setItem('dyadcore-theme', theme);
+  }
+
+  function toggleTheme() {
+    setTheme(html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+  }
+
+  // Init: saved preference > system preference > dark
+  const saved = localStorage.getItem('dyadcore-theme');
+  if (saved) {
+    setTheme(saved);
+  } else if (window.matchMedia('(prefers-color-scheme: light)').matches) {
+    setTheme('light');
+  } else {
+    setTheme('dark');
+  }
+</script>
 
 </body>
 </html>
