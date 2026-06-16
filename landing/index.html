@@ -156,10 +156,6 @@
   footer { padding: 24px 48px; color: var(--footer); font-size: 0.8rem; display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
   footer a { color: var(--footer-link); text-decoration: none; }
   footer a:hover { color: var(--footer-link-hover); }
-  .counter-dark { display: inline; }
-  .counter-light { display: none; }
-  :root[data-theme="light"] .counter-dark { display: none; }
-  :root[data-theme="light"] .counter-light { display: inline; }
 
   @media (max-width: 768px) {
     .hero { padding: 48px 24px 32px; }
@@ -284,8 +280,7 @@ dc.close()
   <span>
     <a href="mailto:dy3uto@gmail.com">dy3uto@gmail.com</a>
     <span style="color:var(--muted4);margin:0 8px">|</span>
-    <img class="counter-dark" src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https://dyadcore.vercel.app&count_bg=%23000000&title_bg=%23000000&title=visits&icon_color=%23333333&edge_flat=true" alt="visits" style="height:18px;vertical-align:middle">
-    <img class="counter-light" src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https://dyadcore.vercel.app&count_bg=%23ffffff&title_bg=%23ffffff&title=visits&icon_color=%23cccccc&edge_flat=true" alt="visits" style="height:18px;vertical-align:middle;border:1px solid #e5e5e5;border-radius:4px">
+    <span id="counter" style="color:var(--muted3)">visits —</span>
   </span>
   <span><a href="https://github.com/dy3uto-alt/dyadcore">GitHub</a> · Apache 2.0</span>
 </footer>
@@ -304,7 +299,6 @@ dc.close()
     setTheme(html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
   }
 
-  // Init: saved preference > system preference > dark
   const saved = localStorage.getItem('dyadcore-theme');
   if (saved) {
     setTheme(saved);
@@ -313,6 +307,18 @@ dc.close()
   } else {
     setTheme('dark');
   }
+
+  // Counter
+  (async () => {
+    const el = document.getElementById('counter');
+    try {
+      const res = await fetch('/api/count', { method: 'POST' });
+      const { count } = await res.json();
+      el.textContent = 'visits ' + count;
+    } catch (e) {
+      el.textContent = '';
+    }
+  })();
 </script>
 
 </body>
