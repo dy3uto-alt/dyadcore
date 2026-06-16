@@ -14,7 +14,11 @@ multisession_results_v*.json
 _eval_out.txt
 _analyze_*.py
 longmemeval_kw_results.json
+longmemeval_results.json
 personamem_results_pilot.json
+personamem_results.json
+eval_conversation_results.json
+multisession_results_v4.json
 dist/
 *.egg-info/
 .vscode/
