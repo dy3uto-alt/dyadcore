@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "dyadcore-mem"
-version = "0.2.0"
+version = "0.2.1"
 description = "Local peer memory system for AI agents — zero-dependency, SQLite-native, FTS5 trigram retrieval with Dual Mirror architecture."
 readme = "README.md"
 license = {text = "Apache-2.0"}
@@ -25,4 +25,4 @@ classifiers = [
 dev = ["pytest>=7"]
 
 [tool.setuptools]
-py-modules = ["dyadcore"]
+py-modules = ["dyadcore", "hermes_bridge"]
