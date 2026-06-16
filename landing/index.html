@@ -221,7 +221,7 @@
   </div>
 
   <div class="block">
-    <p class="cn">现有的记忆 benchmark——MRR、NDCG、Hit Rate——测的是检索系统的命中率。dyadcore 在这些指标上不一定会赢，因为它的排序权重不在语义匹配上，在图结构信号上。这不躲。你要测"记住了吗"，图结构排序给的是下限；你要测"图里长出来的认知对吗"，现有 benchmark 还没有这个题。一个依赖 contradicted 边来进化、不做时间衰减、从图拓扑里涌现信念的系统，需要一套新的评测维度。这可能是接下来最值得做的事。</p>
+    <p class="cn">现有的记忆 benchmark——MRR、NDCG、Hit Rate——测的是检索系统的命中率。dyadcore 在这些指标上不一定会赢，因为它的排序权重不在语义匹配上，在图结构信号上。测"记住了吗"，图结构排序给的是下限。测"图里长出来的认知对吗"，现有 benchmark 还没有这道题。一个靠 contradicted 边进化、不做时间衰减、从图拓扑里涌现信念的系统，需要一套自己的评测维度。</p>
     <span class="en">Existing memory benchmarks — MRR, NDCG, Hit Rate — measure retrieval hit rates. dyadcore won't necessarily win on these. Its ranking weights aren't on semantic matching but on structural graph signals. That's not something to hide from. If you're asking "did it remember," graph-based ranking gives you a floor. If you're asking "are the beliefs that emerged from the graph correct," no existing benchmark has that question yet. A system that evolves through contradicted edges, refuses time decay, and lets beliefs surface from topology — it needs a new evaluation framework. That might be the most important thing to build next.</span>
   </div>
 </section>
