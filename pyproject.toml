@@ -1,9 +1,9 @@
 [build-system]
 requires = ["setuptools>=64"]
-build-backend = "setuptools.backends._legacy:_Backend"
+build-backend = "setuptools.build_meta"
 
 [project]
-name = "dyadcore"
+name = "dyadcore-mem"
 version = "0.2.0"
 description = "Local peer memory system for AI agents — zero-dependency, SQLite-native, FTS5 trigram retrieval with Dual Mirror architecture."
 readme = "README.md"
