@@ -308,13 +308,13 @@ dc.close()
     setTheme('dark');
   }
 
-  // Counter — countapi.xyz, free & open source
+  // Counter — counterapi.dev
   (async () => {
     const el = document.getElementById('counter');
     try {
-      const res = await fetch('https://api.countapi.xyz/hit/dyadcore.vercel.app/visits');
+      const res = await fetch('https://api.counterapi.dev/v1/dyadcore/visits/up');
       const data = await res.json();
-      el.textContent = 'visits ' + data.value;
+      el.textContent = 'visits ' + data.count;
     } catch (e) {
       el.textContent = '';
     }
