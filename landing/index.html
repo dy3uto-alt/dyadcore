@@ -101,6 +101,15 @@
   .hero a { color: var(--hero-link); font-size: 0.9rem; text-decoration: none; transition: color 0.15s; }
   .hero a:hover { color: var(--hero-link-hover); }
 
+  /* Philosophy */
+  .philosophy { padding: 48px 48px; }
+  .philosophy .block { margin-bottom: 28px; }
+  .philosophy .cn { font-size: 1rem; color: var(--text); line-height: 1.75; }
+  .philosophy .cn::before { content: open-quote; }
+  .philosophy .cn::after { content: close-quote; }
+  .philosophy .en { font-size: 0.85rem; color: var(--muted); line-height: 1.65; margin-top: 8px; display: block; font-style: italic; }
+  .philosophy .label { font-size: 0.75rem; color: var(--muted3); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 20px; }
+
   /* Section */
   section { padding: 0; }
   section h2 { font-size: 1rem; font-weight: 700; color: var(--section-h2); margin-bottom: 16px; letter-spacing: -0.01em; }
@@ -167,6 +176,8 @@
     .two-col { grid-template-columns: 1fr; }
     .two-col > div { padding: 24px; }
     .two-col > div:first-child { border-right: 0; border-bottom: 1px solid var(--border); }
+    .philosophy { padding: 32px 24px; }
+    .philosophy .cn { font-size: 0.92rem; }
     .constraints { grid-template-columns: 1fr; }
     .constraints > div { padding: 20px 24px; }
     .theme-btn { top: 12px; right: 12px; }
@@ -186,6 +197,32 @@
   </p>
   <a href="https://github.com/dy3uto-alt/dyadcore">GitHub</a>  ·  <a href="https://pypi.org/project/dyadcore-mem/">PyPI</a>
 </header>
+
+<hr>
+
+<section class="philosophy">
+  <div class="label">立场</div>
+
+  <div class="block">
+    <p class="cn">记忆不是存进去再查出来的数据。用户说的、Agent 回应的，都在一个场里留下痕迹。记忆的价值不取决于被命中多少次，取决于它和别的痕迹构成了什么样的关系网。图结构里的确认、矛盾、关联，这些信号比语义相似度更值得信。</p>
+    <span class="en">Memory isn't data you store and query. What the user says, what the agent replies — all of it leaves traces in a shared field. A memory's value isn't how many times it gets hit. It's the web of relations it forms — confirmations, contradictions, associations. Those structural signals matter more than semantic similarity.</span>
+  </div>
+
+  <div class="block">
+    <p class="cn">Beliefs 是从关系图的矛盾里长出来的，不是谁写进去的。置信度也不靠外部打分，就看证据多不多、有没有被回声确认过、是不是用户和 Agent 双源都在说——纯结构置信度。旧记忆也不做时间衰减，一条三周前被矛盾掉的痕迹，排序里就该盖过三天前的弱相干。记忆的价值在结构里，不在时间线上。</p>
+    <span class="en">Beliefs emerge from contradictions in the graph — they aren't authored. Confidence is purely structural: how much evidence, whether there's echoed confirmation, whether both user and agent are speaking. No external scoring. Old memories don't decay — a contradiction from three weeks ago should outrank a weak match from three days ago. Value lives in structure, not on a timeline.</span>
+  </div>
+
+  <div class="block">
+    <p class="cn">大多数记忆方案把 Agent 当记忆的中心，用户只是被记住的对象。但现实不是这样的。用户和 Agent 是磁场里对等的两极，痕迹是双向留下的。没有谁观察谁——同一个场里反复触动、确认、修正。把这个叫去 Agent 中心化。这个立场可能比单项技术选择更能影响记忆系统长期长成什么样。</p>
+    <span class="en">Most memory systems put the agent at the center — the user is just the one being remembered. That's not how real conversation works. User and agent are two equal poles in a magnetic field, leaving traces in both directions. No observer and observed — just repeated triggering, echoing, and revision happening in the same field. This is de-agent-centric design. It might shape long-term memory behavior more than any single technical choice.</span>
+  </div>
+
+  <div class="block">
+    <p class="cn">现有的记忆 benchmark——MRR、NDCG、Hit Rate——测的是检索系统的命中率。dyadcore 在这些指标上不一定会赢，因为它的排序权重不在语义匹配上，在图结构信号上。这不躲。你要测"记住了吗"，图结构排序给的是下限；你要测"图里长出来的认知对吗"，现有 benchmark 还没有这个题。一个依赖 contradicted 边来进化、不做时间衰减、从图拓扑里涌现信念的系统，需要一套新的评测维度。这可能是接下来最值得做的事。</p>
+    <span class="en">Existing memory benchmarks — MRR, NDCG, Hit Rate — measure retrieval hit rates. dyadcore won't necessarily win on these. Its ranking weights aren't on semantic matching but on structural graph signals. That's not something to hide from. If you're asking "did it remember," graph-based ranking gives you a floor. If you're asking "are the beliefs that emerged from the graph correct," no existing benchmark has that question yet. A system that evolves through contradicted edges, refuses time decay, and lets beliefs surface from topology — it needs a new evaluation framework. That might be the most important thing to build next.</span>
+  </div>
+</section>
 
 <hr>
 
